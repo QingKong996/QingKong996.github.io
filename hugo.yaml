@@ -1,0 +1,130 @@
+baseURL: "https://qingkong996.github.io/"
+theme: ["PaperMod"]
+
+# --- 全局基础配置 ---
+defaultContentLanguage: zh
+hasCJKLanguage: true
+
+# --- 语言专项配置 ---
+languages:
+  # 简体中文
+  zh:
+    languageCode: zh-cn
+    languageName: "简体中文"
+    contentDir: content/zh
+    weight: 1
+    title: "QingKong996's Blog"
+    params:
+      mainSections: ["posts"] # 关键：告诉首页显示 content/zh/posts 里的内容
+      homeInfoParams:
+        Title: "QingKong996"
+        Content: ""
+    menu:
+      main:
+        - name: "分类"
+          url: "categories"
+          weight: 10
+        - name: "标签"
+          url: "tags"
+          weight: 20
+        - name: "归档"
+          url: "archives"
+          weight: 30
+
+  # 繁体中文
+  zt:
+    languageCode: zh-tw
+    languageName: "繁體中文"
+    contentDir: content/zt
+    weight: 2
+    title: "QingKong996's Blog"
+    params:
+      mainSections: ["posts"]
+      homeInfoParams:
+        Title: "QingKong996"
+        Content: ""
+    menu:
+      main:
+        - name: "分類"
+          url: "categories"
+          weight: 10
+        - name: "標籤"
+          url: "tags"
+          weight: 20
+        - name: "歸檔"
+          url: "archives"
+          weight: 30
+
+  # 英文
+  en:
+    languageCode: en
+    languageName: "English"
+    contentDir: content/en
+    weight: 3
+    title: "QingKong's Blog"
+    params:
+      mainSections: ["posts"]
+      homeInfoParams:
+        Title: "QingKong996"
+        Content: ""
+    menu:
+      main:
+        - name: "Categories"
+          url: "categories"
+          weight: 10
+        - name: "Tags"
+          url: "tags"
+          weight: 20
+        - name: "Archives"
+          url: "archives"
+          weight: 30
+
+  # 俄语 (Russian)
+  ru:
+    languageCode: ru
+    languageName: "Русский"
+    contentDir: content/ru
+    weight: 4
+    title: "Блог QingKong996"
+    params:
+      mainSections: ["posts"]
+      homeInfoParams:
+        Title: "QingKong996"
+        Content: ""
+    menu:
+      main:
+        - name: "Категории"
+          url: "categories"
+          weight: 10
+        - name: "Теги"
+          url: "tags"
+          weight: 20
+        - name: "Архив"
+          url: "archives"
+          weight: 30
+
+# --- 通用参数 (所有语言共享) ---
+params:
+  ShowPostNavLinks: true
+  ShowCodeCopyButtons: true
+  ShowShareButtons: true
+  ShowReadingTime: true
+  ShowToc: true
+  ShowBreadCrumbs: true
+  
+  editPost:
+    URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content"
+    Text: "Suggest Changes"
+    appendFilePath: true
+
+  socialIcons:
+    - name: "x"
+      url: "https://x.com/QingKong007"
+    - name: "github"
+      url: "https://github.com/QingKong996"
+    - name: "email"
+      url: "mailto:3395448530@qq.com"
+      title: "QQ邮箱"
+    - name: "email"
+      url: "mailto:qingkong996@gmail.com"
+      title: "Gmail"
