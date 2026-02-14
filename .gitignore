@@ -1,0 +1,23 @@
+# Hugo
+.hugo_build.lock
+public/
+resources/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Testing
+coverage/
+*.coverag
