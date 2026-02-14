@@ -103,11 +103,35 @@ languages:
           url: "archives"
           weight: 30
 
+  # 日语 (Japanese)
+  ja:
+    languageCode: ja
+    languageName: "日本語"
+    contentDir: content/ja
+    weight: 5
+    title: "QingKong996のブログ"
+    params:
+      mainSections: ["posts"]
+      homeInfoParams:
+        Title: "QingKong996"
+        Content: ""
+    menu:
+      main:
+        - name: "カテゴリー"
+          url: "categories"
+          weight: 10
+        - name: "タグ"
+          url: "tags"
+          weight: 20
+        - name: "アーカイブ"
+          url: "archives"
+          weight: 30
+
 # --- 通用参数 (所有语言共享) ---
 params:
   ShowPostNavLinks: true
   ShowCodeCopyButtons: true
-  ShowShareButtons: true
+  ShowShareButtons: false
   ShowReadingTime: true
   ShowToc: true
   ShowBreadCrumbs: true
