@@ -1,0 +1,44 @@
+{{- if .IsHome }}
+{{- with site.Params.contentLicense }}
+{{- $siteText := "" -}}
+{{- if eq $.Lang "zh" -}}
+  {{- $siteText = "除特别说明外，本站内容采用" -}}
+{{- else if eq $.Lang "zt" -}}
+  {{- $siteText = "除特別說明外，本站內容採用" -}}
+{{- else if eq $.Lang "en" -}}
+  {{- $siteText = "Unless otherwise noted, the content on this site is licensed under" -}}
+{{- else if eq $.Lang "ru" -}}
+  {{- $siteText = "Если не указано иное, материалы сайта распространяются по лицензии" -}}
+{{- else if eq $.Lang "ja" -}}
+  {{- $siteText = "特に明記がない限り、このサイトの内容は" -}}
+{{- else -}}
+  {{- $siteText = "Unless otherwise noted, the content on this site is licensed under" -}}
+{{- end -}}
+
+<div class="license-wrap">
+  <p class="license-notice">
+    {{- $siteText -}}
+    <a href="{{ .url }}" target="_blank" rel="license noopener noreferrer">{{ .name }}</a>
+  </p>
+</div>
+{{- end }}
+{{- end }}
+
+{{- if ne .Lang "zh" }}
+{{- $translationText := "" -}}
+{{- if eq .Lang "zt" -}}
+  {{- $translationText = "本頁內容由簡體中文原文經 AI 輔助轉換而來。" -}}
+{{- else if eq .Lang "en" -}}
+  {{- $translationText = "This page was translated from the Simplified Chinese original with AI assistance." -}}
+{{- else if eq .Lang "ru" -}}
+  {{- $translationText = "Эта страница переведена с оригинала на упрощённом китайском с помощью ИИ." -}}
+{{- else if eq .Lang "ja" -}}
+  {{- $translationText = "このページは簡体字中国語の原文をもとに AI 支援で翻訳しています。" -}}
+{{- else -}}
+  {{- $translationText = "This page was translated from the Simplified Chinese original with AI assistance." -}}
+{{- end -}}
+
+<div class="translation-wrap">
+  <p class="translation-note">{{ $translationText }}</p>
+</div>
+{{- end }}

@@ -1,9 +1,10 @@
-baseURL: "https://zhenhaoliu.com/"
+baseURL: "https://qingkong996.github.io/"
 theme: ["PaperMod"]
 
 # --- 全局基础配置 ---
 defaultContentLanguage: zh
 hasCJKLanguage: true
+enableRobotsTXT: true
 
 # --- 语言专项配置 ---
 languages:
@@ -15,10 +16,16 @@ languages:
     weight: 1
     title: "QingKong996's Blog"
     params:
-      mainSections: ["posts"] # 关键：告诉首页显示 content/zh/posts 里的内容
+      description: "QingKong996 的个人博客，记录开发、技术与随笔。"
+      languageAltTitle: "简体中文"
+      mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: ""
+        Content: "记录开发实践、工具折腾和一些值得留下来的想法。"
+      editPost:
+        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/zh"
+        Text: "改进这篇文章"
+        appendFilePath: true
     menu:
       main:
         - name: "分类"
@@ -39,10 +46,16 @@ languages:
     weight: 2
     title: "QingKong996's Blog"
     params:
+      description: "QingKong996 的個人部落格，記錄開發、技術與隨筆。"
+      languageAltTitle: "繁體中文"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: ""
+        Content: "記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
+      editPost:
+        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/zt"
+        Text: "改進這篇文章"
+        appendFilePath: true
     menu:
       main:
         - name: "分類"
@@ -63,10 +76,16 @@ languages:
     weight: 3
     title: "QingKong's Blog"
     params:
+      description: "QingKong996's personal blog about development, tools, and notes."
+      languageAltTitle: "English"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: ""
+        Content: "Notes on building, debugging, and keeping useful ideas worth revisiting."
+      editPost:
+        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/en"
+        Text: "Improve this post"
+        appendFilePath: true
     menu:
       main:
         - name: "Categories"
@@ -87,10 +106,16 @@ languages:
     weight: 4
     title: "Блог QingKong996"
     params:
+      description: "Личный блог QingKong996 о разработке, инструментах и заметках."
+      languageAltTitle: "Русский"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: ""
+        Content: "Заметки о разработке, инструментах и идеях, к которым хочется возвращаться."
+      editPost:
+        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/ru"
+        Text: "Предложить правку"
+        appendFilePath: true
     menu:
       main:
         - name: "Категории"
@@ -111,10 +136,16 @@ languages:
     weight: 5
     title: "QingKong996のブログ"
     params:
+      description: "開発、ツール、日々のメモを記録する QingKong996 のブログです。"
+      languageAltTitle: "日本語"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: ""
+        Content: "開発の記録やツールのメモ、あとで見返したくなる考えを残しています。"
+      editPost:
+        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/ja"
+        Text: "この記事を改善"
+        appendFilePath: true
     menu:
       main:
         - name: "カテゴリー"
@@ -129,26 +160,38 @@ languages:
 
 # --- 通用参数 (所有语言共享) ---
 params:
+  author: "QingKong996"
+  description: "QingKong996 的个人博客"
+  keywords:
+    - "QingKong996"
+    - "Hugo"
+    - "Blog"
+    - "Programming"
+  displayFullLangName: true
+
   ShowPostNavLinks: true
   ShowCodeCopyButtons: true
   ShowShareButtons: false
   ShowReadingTime: true
   ShowToc: true
   ShowBreadCrumbs: true
-  
+
+  assets:
+    theme_color: "#151c2b"
+    msapplication_TileColor: "#151c2b"
+
   editPost:
-    URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content"
-    Text: "Suggest Changes"
     appendFilePath: true
+
+  contentLicense:
+    name: "CC BY-NC-SA 4.0"
+    url: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
 
   socialIcons:
     - name: "x"
       url: "https://x.com/QingKong007"
     - name: "github"
       url: "https://github.com/QingKong996"
-    - name: "email"
-      url: "mailto:3395448530@qq.com"
-      title: "QQ邮箱"
     - name: "email"
       url: "mailto:qingkong996@gmail.com"
       title: "Gmail"

@@ -1,0 +1,33 @@
+.license-wrap {
+  max-width: calc(var(--main-width) + var(--gap) * 2);
+  margin: 10px auto 0;
+  padding: 0 var(--gap) 20px;
+  text-align: center;
+}
+
+.license-notice {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.license-notice a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.translation-wrap {
+  max-width: calc(var(--main-width) + var(--gap) * 2);
+  margin: 10px auto 0;
+  padding: 0 var(--gap) 20px;
+  text-align: center;
+}
+
+.translation-note {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
