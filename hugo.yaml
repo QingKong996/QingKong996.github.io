@@ -168,6 +168,7 @@ params:
     - "Blog"
     - "Programming"
   displayFullLangName: true
+  math: true
 
   ShowPostNavLinks: true
   ShowCodeCopyButtons: true
@@ -195,3 +196,26 @@ params:
     - name: "email"
       url: "mailto:qingkong996@gmail.com"
       title: "Gmail"
+
+markup:
+  goldmark:
+    extensions:
+      strikethrough: false
+      extras:
+        delete:
+          enable: true
+        mark:
+          enable: true
+        subscript:
+          enable: true
+        superscript:
+          enable: true
+      passthrough:
+        enable: true
+        delimiters:
+          block:
+            - ['$$', '$$']
+          inline:
+            - ['$', '$']
+    renderer:
+      unsafe: true
