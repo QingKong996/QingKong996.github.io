@@ -1,4 +1,4 @@
-baseURL: "https://qingkong996.github.io/"
+baseURL: "https://qingkong996.com/"
 theme: ["PaperMod"]
 
 # --- 全局基础配置 ---
@@ -14,14 +14,23 @@ languages:
     languageName: "简体中文"
     contentDir: content/zh
     weight: 1
-    title: "QingKong996's Blog"
+    title: "QingKong996"
     params:
-      description: "QingKong996 的个人博客，记录开发、技术与随笔。"
+      description: "QingKong996 的个人博客，记录开发实践、工具折腾和一些值得留下来的想法。"
+      keywords:
+        - "QingKong996"
+        - "开发实践"
+        - "工具折腾"
+        - "编程博客"
+        - "Hugo"
       languageAltTitle: "简体中文"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
         Content: "记录开发实践、工具折腾和一些值得留下来的想法。"
+      seo:
+        homeTitle: "QingKong996 | 开发实践、工具折腾与值得留下来的想法"
+        homeDescription: "QingKong996 的个人博客，记录开发实践、工具折腾和一些值得留下来的想法。"
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/zh"
         Text: "改进这篇文章"
@@ -44,14 +53,23 @@ languages:
     languageName: "繁體中文"
     contentDir: content/zt
     weight: 2
-    title: "QingKong996's Blog"
+    title: "QingKong996"
     params:
-      description: "QingKong996 的個人部落格，記錄開發、技術與隨筆。"
+      description: "QingKong996 的個人部落格，記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
+      keywords:
+        - "QingKong996"
+        - "開發實踐"
+        - "工具折騰"
+        - "程式設計部落格"
+        - "Hugo"
       languageAltTitle: "繁體中文"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
         Content: "記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
+      seo:
+        homeTitle: "QingKong996 | 開發實踐、工具折騰與值得留下來的想法"
+        homeDescription: "QingKong996 的個人部落格，記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/zt"
         Text: "改進這篇文章"
@@ -74,14 +92,23 @@ languages:
     languageName: "English"
     contentDir: content/en
     weight: 3
-    title: "QingKong's Blog"
+    title: "QingKong996"
     params:
-      description: "QingKong996's personal blog about development, tools, and notes."
+      description: "QingKong996's personal blog about development practice, tool experiments, and notes worth keeping."
+      keywords:
+        - "QingKong996"
+        - "development practice"
+        - "developer blog"
+        - "tooling"
+        - "Hugo"
       languageAltTitle: "English"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
         Content: "Notes on building, debugging, and keeping useful ideas worth revisiting."
+      seo:
+        homeTitle: "QingKong996 | Development practice, tooling, and notes worth keeping"
+        homeDescription: "QingKong996's personal blog about development practice, tool experiments, and notes worth keeping."
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/en"
         Text: "Improve this post"
@@ -104,14 +131,23 @@ languages:
     languageName: "Русский"
     contentDir: content/ru
     weight: 4
-    title: "Блог QingKong996"
+    title: "QingKong996"
     params:
-      description: "Личный блог QingKong996 о разработке, инструментах и заметках."
+      description: "Личный блог QingKong996 о практике разработки, инструментах и заметках, к которым хочется возвращаться."
+      keywords:
+        - "QingKong996"
+        - "разработка"
+        - "инструменты"
+        - "блог разработчика"
+        - "Hugo"
       languageAltTitle: "Русский"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
         Content: "Заметки о разработке, инструментах и идеях, к которым хочется возвращаться."
+      seo:
+        homeTitle: "QingKong996 | Практика разработки, инструменты и заметки"
+        homeDescription: "Личный блог QingKong996 о практике разработки, инструментах и заметках, к которым хочется возвращаться."
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/ru"
         Text: "Предложить правку"
@@ -134,14 +170,23 @@ languages:
     languageName: "日本語"
     contentDir: content/ja
     weight: 5
-    title: "QingKong996のブログ"
+    title: "QingKong996"
     params:
-      description: "開発、ツール、日々のメモを記録する QingKong996 のブログです。"
+      description: "開発の実践、ツールの試行錯誤、あとで見返したくなるメモを記録する QingKong996 のブログです。"
+      keywords:
+        - "QingKong996"
+        - "開発実践"
+        - "ツール"
+        - "技術ブログ"
+        - "Hugo"
       languageAltTitle: "日本語"
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
         Content: "開発の記録やツールのメモ、あとで見返したくなる考えを残しています。"
+      seo:
+        homeTitle: "QingKong996 | 開発の実践、ツール、残しておきたいメモ"
+        homeDescription: "開発の実践、ツールの試行錯誤、あとで見返したくなるメモを記録する QingKong996 のブログです。"
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/ja"
         Text: "この記事を改善"
@@ -161,14 +206,20 @@ languages:
 # --- 通用参数 (所有语言共享) ---
 params:
   author: "QingKong996"
-  description: "QingKong996 的个人博客"
+  description: "QingKong996 的个人博客，记录开发实践、工具折腾和一些值得留下来的想法。"
   keywords:
     - "QingKong996"
-    - "Hugo"
-    - "Blog"
+    - "Developer Blog"
     - "Programming"
+    - "Tooling"
+    - "Hugo"
   displayFullLangName: true
   math: true
+  schema:
+    publisherType: "Person"
+    sameAs:
+      - "https://github.com/QingKong996"
+      - "https://x.com/QingKong007"
 
   ShowPostNavLinks: true
   ShowCodeCopyButtons: true

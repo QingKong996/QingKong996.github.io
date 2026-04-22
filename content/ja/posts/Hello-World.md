@@ -3,6 +3,7 @@ title: "こんにちは、世界"
 date: "2026-02-05T14:14:16+08:00"
 lastmod: "2026-04-21T00:00:00+08:00"
 summary: "ブログ最初の記事であり、LaTeX、埋め込み HTML、ハイライト、上付き文字、下付き文字などの表示を確認するためのテストページです。"
+hideSummary: true
 draft: false
 author: "QingKong996"
 categories:

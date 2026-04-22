@@ -3,6 +3,7 @@ title: "你好，世界"
 date: "2026-02-05T14:14:16+08:00"
 lastmod: "2026-04-21T00:00:00+08:00"
 summary: "部落格的第一篇文章，一篇用於展示與驗證 LaTeX、內嵌 HTML、高亮、上下標等內容渲染效果的測試頁。"
+hideSummary: true
 draft: false
 author: "QingKong996"
 categories:

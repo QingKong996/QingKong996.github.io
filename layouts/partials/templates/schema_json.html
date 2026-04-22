@@ -1,132 +1,162 @@
-{{ if .IsHome }}
-{{- $logo := site.Params.assets.favicon -}}
+{{- $publisherType := (site.Params.schema.publisherType | default "Person") | title -}}
+{{- $authorName := site.Params.author | default site.Title -}}
+{{- $langCode := .Language.LanguageCode | default .Language.Lang | default "en" -}}
+{{- $homeDescription := or site.Params.seo.homeDescription (.Param "description") site.Params.description site.Title -}}
+{{- $logoURL := "" -}}
+{{- with site.Params.assets.favicon -}}
+  {{- $logoURL = . | absURL -}}
+{{- end -}}
+
+{{- $sameAs := slice -}}
+{{- with site.Params.schema.sameAs -}}
+  {{- range . -}}
+    {{- $sameAs = $sameAs | append . -}}
+  {{- end -}}
+{{- else -}}
+  {{- range site.Params.socialIcons -}}
+    {{- $url := trim .url " " -}}
+    {{- if or (hasPrefix $url "https://") (hasPrefix $url "http://") -}}
+      {{- $sameAs = $sameAs | append $url -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $publisherName := cond (eq $publisherType "Person") $authorName site.Title -}}
+
+{{- if .IsHome -}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "{{- ( site.Params.schema.publisherType | default "Organization") | title -}}",
-  "name": {{ site.Title }},
+  "@type": {{ $publisherType }},
+  "name": {{ $publisherName }},
   "url": {{ site.Home.Permalink }},
-  "description": {{ (.Param "description") | plainify | truncate 180 | safeHTML }},
-  {{- if $logo }}
-  {{- if (eq site.Params.schema.publisherType "Person") }}
-  "image": {{ $logo | absURL }},
-  {{- else }}
-  "logo": {{ $logo | absURL }},
-  {{- end }}
-  {{- end }}
-  "sameAs": [
-    {{- if site.Params.schema.sameAs }}
-      {{ range $i, $e := site.Params.schema.sameAs }}{{ if $i }}, {{ end }}{{ trim $e " " }}{{ end }}
-    {{- else}}
-      {{ range $i, $e := site.Params.SocialIcons }}{{ if $i }}, {{ end }}{{ trim $e.url " " | safeURL }}{{ end }}
-    {{- end}}
-  ]
+  "description": {{ $homeDescription | plainify | htmlUnescape | chomp }},
+  "sameAs": {{ $sameAs | jsonify | safeJS }}{{ if and $logoURL (eq $publisherType "Person") }},
+  "image": {{ $logoURL }}{{ else if and $logoURL (eq $publisherType "Organization") }},
+  "logo": {{ $logoURL }}{{ end }}
 }
 </script>
-{{- else if (or .IsPage .IsSection) }}
-{{/* BreadcrumbList */}}
-{{- $url := replace .Parent.Permalink ( printf "%s" site.Home.Permalink) "" }}
-{{- $lang_url := strings.TrimPrefix ( printf "%s/" .Lang) $url }}
-{{- $bc_list := (split $lang_url "/")}}
 
-{{- $scratch := newScratch }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ site.Title }},
+  "url": {{ site.Home.Permalink }},
+  "description": {{ $homeDescription | plainify | htmlUnescape | chomp }},
+  "inLanguage": {{ $langCode }},
+  "publisher": {
+    "@type": {{ $publisherType }},
+    "name": {{ $publisherName }}{{ if and $logoURL (eq $publisherType "Organization") }},
+    "logo": {
+      "@type": "ImageObject",
+      "url": {{ $logoURL }}
+    }{{ end }}
+  }
+}
+</script>
+{{- else if or .IsPage .IsSection -}}
+  {{- $breadcrumbItems := slice -}}
+  {{- if .Parent -}}
+    {{- $url := replace .Parent.Permalink (printf "%s" site.Home.Permalink) "" -}}
+    {{- $langURL := strings.TrimPrefix (printf "%s/" .Lang) $url -}}
+    {{- $segments := split $langURL "/" -}}
+    {{- $scratch := newScratch -}}
+    {{- range $segments -}}
+      {{- if gt (len .) 0 -}}
+        {{- $scratch.Add "path" (printf "%s/" .) -}}
+        {{- $bcPage := site.GetPage ($scratch.Get "path") -}}
+        {{- if $bcPage -}}
+          {{- $breadcrumbItems = $breadcrumbItems | append (dict
+            "@type" "ListItem"
+            "position" (add (len $breadcrumbItems) 1)
+            "name" $bcPage.Name
+            "item" $bcPage.Permalink
+          ) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $breadcrumbItems = $breadcrumbItems | append (dict
+    "@type" "ListItem"
+    "position" (add (len $breadcrumbItems) 1)
+    "name" .Name
+    "item" .Permalink
+  ) -}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
-  {{- range $index, $element := $bc_list }}
-
-    {{- $scratch.Add "path" (printf "%s/" $element ) | safeJS }}
-    {{- $bc_pg := site.GetPage ($scratch.Get "path") -}}
-
-    {{- if (and ($bc_pg) (gt (len . ) 0))}}
-    {{- if (and $index)}}, {{end }}
-    {
-      "@type": "ListItem",
-      "position": {{ add 1 $index  }},
-      "name": {{ $bc_pg.Name }},
-      "item": {{ $bc_pg.Permalink | safeHTML }}
-    }
-    {{- end }}
-
-  {{- end }}
-  {{- /*  self-page addition  */ -}}
-  {{- if (ge (len $bc_list) 2) }}, {{end }}
-    {
-      "@type": "ListItem",
-      "position": {{len $bc_list}},
-      "name": {{ .Name }},
-      "item": {{ .Permalink | safeHTML }}
-    }
-  ]
+  "itemListElement": {{ $breadcrumbItems | jsonify | safeJS }}
 }
 </script>
-{{- if .IsPage }}
-{{- $logo := site.Params.assets.favicon -}}
+
+  {{- if .IsPage -}}
+    {{- $description := or (.Description | plainify | htmlUnescape | chomp) (.Summary | plainify | htmlUnescape | chomp) -}}
+    {{- $keywords := slice -}}
+    {{- with .Params.keywords -}}
+      {{- range . -}}
+        {{- $keywords = $keywords | append . -}}
+      {{- end -}}
+    {{- else -}}
+      {{- with .Params.tags -}}
+        {{- range . -}}
+          {{- $keywords = $keywords | append . -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $authorValue := .Params.author | default site.Params.author -}}
+    {{- $author := dict "@type" "Person" "name" $authorValue -}}
+    {{- if or (eq (printf "%T" $authorValue) "[]string") (eq (printf "%T" $authorValue) "[]interface {}") -}}
+      {{- $authors := slice -}}
+      {{- range $authorValue -}}
+        {{- $authors = $authors | append (dict "@type" "Person" "name" .) -}}
+      {{- end -}}
+      {{- $author = $authors -}}
+    {{- end -}}
+
+    {{- $imageValue := "" -}}
+    {{- if .Params.cover.image -}}
+      {{- if ne .Params.cover.relative true -}}
+        {{- $imageValue = .Params.cover.image | absURL -}}
+      {{- else -}}
+        {{- $imageValue = (path.Join .RelPermalink .Params.cover.image) | absURL -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $images := partial "templates/_funcs/get-page-images" . -}}
+      {{- with index $images 0 -}}
+        {{- $imageValue = .Permalink -}}
+      {{- end -}}
+    {{- end -}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": {{ .Title | plainify}},
-  "name": "{{ .Title | plainify }}",
-  "description": {{ with .Description | plainify }}{{ . }}{{ else }}{{ .Summary | plainify  }}{{ end -}},
-  "keywords": [
-    {{- if .Params.keywords }}
-    {{ range $i, $e := .Params.keywords }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}
-    {{- else }}
-    {{ range $i, $e := .Params.tags }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}
-    {{- end }}
-  ],
-  "articleBody": {{ .Content | safeJS | htmlUnescape | plainify }},
-  "wordCount" : "{{ .WordCount }}",
-  "inLanguage": {{ .Language.LanguageCode | default .Language.Lang | default "en-us" }},
-  {{ if .Params.cover.image -}}
-  "image":
-    {{- if (ne .Params.cover.relative true) -}}
-    {{ .Params.cover.image | absURL }},
-    {{- else -}}
-    {{ (path.Join .RelPermalink .Params.cover.image ) | absURL }},
-    {{- end}}
-  {{- else }}
-    {{- $images := partial "templates/_funcs/get-page-images" . -}}
-    {{- with index $images 0 -}}
-  "image": {{ .Permalink }},
-    {{- end }}
-  {{- end -}}
-  "datePublished": {{ .PublishDate }},
-  "dateModified": {{ .Lastmod }},
-  {{- with (.Params.author | default site.Params.author) }}
-  "author":
-    {{- if (or (eq (printf "%T" .) "[]string") (eq (printf "%T" .) "[]interface {}")) -}}
-  [{{- range $i, $v := . -}}
-  {{- if $i }}, {{end -}}
-  {
-    "@type": "Person",
-    "name": {{ $v }}
-  }
-  {{- end }}],
-    {{- else -}}
-  {
-    "@type": "Person",
-    "name": {{ . }}
-  },
-    {{- end -}}
-  {{- end }}
+  "headline": {{ .Title | plainify | htmlUnescape | chomp }},
+  "name": {{ .Title | plainify | htmlUnescape | chomp }},
+  "description": {{ $description }},
+  "keywords": {{ $keywords | jsonify | safeJS }},
+  "articleBody": {{ .Plain | plainify | htmlUnescape | chomp }},
+  "wordCount": {{ .WordCount }},
+  "inLanguage": {{ $langCode }},
+  "datePublished": {{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }},
+  "dateModified": {{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }},
+  "author": {{ $author | jsonify | safeJS }},
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": {{ .Permalink | safeHTML }}
+    "@id": {{ .Permalink }}
   },
   "publisher": {
-    "@type": "{{- ( site.Params.schema.publisherType | default "Organization") | title -}}",
-    "name": {{ site.Title }}{{- if $logo }},
+    "@type": {{ $publisherType }},
+    "name": {{ $publisherName }}{{ if and $logoURL (eq $publisherType "Organization") }},
     "logo": {
       "@type": "ImageObject",
-      "url": {{ $logo | absURL }}
-    }{{- end }}
-  }
+      "url": {{ $logoURL }}
+    }{{ end }}
+  }{{ with $imageValue }},
+  "image": {{ . }}{{ end }}
 }
 </script>
-{{- end }}{{/* .IsPage end */}}
-
+  {{- end -}}
 {{- end -}}

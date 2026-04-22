@@ -3,6 +3,7 @@ title: "Hello World"
 date: "2026-02-05T14:14:16+08:00"
 lastmod: "2026-04-21T00:00:00+08:00"
 summary: "The first post on the blog, a test page for showcasing and verifying the rendering of LaTeX, embedded HTML, highlighting, superscripts, and subscripts."
+hideSummary: true
 draft: false
 author: "QingKong996"
 categories:
