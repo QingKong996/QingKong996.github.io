@@ -58,6 +58,16 @@ def extract_canonical(html_text: str) -> str:
     return html.unescape(match.group(1))
 
 
+def extract_hreflangs(html_text: str) -> dict[str, str]:
+    links = re.findall(
+        r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"',
+        html_text,
+    )
+    if not links:
+        raise AssertionError("missing hreflang links")
+    return {html.unescape(lang): html.unescape(href) for lang, href in links}
+
+
 def extract_json_ld(html_text: str) -> list[dict]:
     blocks = re.findall(
         r'<script type="application/ld\+json">\s*(.*?)\s*</script>',
@@ -76,6 +86,9 @@ class SeoOutputTest(unittest.TestCase):
         run_hugo_build()
         cls.home_html = read_text(BUILD_DIR / "index.html")
         cls.post_html = read_text(BUILD_DIR / "posts" / "hello-world" / "index.html")
+        cls.categories_html = read_text(BUILD_DIR / "categories" / "index.html")
+        cls.tags_html = read_text(BUILD_DIR / "tags" / "index.html")
+        cls.archives_html = read_text(BUILD_DIR / "archives" / "index.html")
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -114,6 +127,28 @@ class SeoOutputTest(unittest.TestCase):
         website = by_type["WebSite"]
         self.assertEqual(website["url"], "https://qingkong996.com/")
         self.assertIn("开发实践", website["description"])
+
+    def test_homepage_declares_language_alternates_with_x_default(self) -> None:
+        hreflangs = extract_hreflangs(self.home_html)
+
+        self.assertEqual(hreflangs["zh-cn"], "https://qingkong996.com/")
+        self.assertEqual(hreflangs["zh-tw"], "https://qingkong996.com/zt/")
+        self.assertEqual(hreflangs["en"], "https://qingkong996.com/en/")
+        self.assertEqual(hreflangs["ru"], "https://qingkong996.com/ru/")
+        self.assertEqual(hreflangs["ja"], "https://qingkong996.com/ja/")
+        self.assertEqual(hreflangs["x-default"], "https://qingkong996.com/")
+
+    def test_thin_list_pages_are_noindex_but_followed(self) -> None:
+        for page_name, html_text in {
+            "categories": self.categories_html,
+            "tags": self.tags_html,
+            "archives": self.archives_html,
+        }.items():
+            with self.subTest(page=page_name):
+                self.assertEqual(
+                    extract_meta(html_text, "name", "robots"),
+                    "noindex, follow",
+                )
 
     def test_post_json_ld_is_valid_and_uses_custom_domain(self) -> None:
         self.assertEqual(

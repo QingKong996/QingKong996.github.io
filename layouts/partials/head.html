@@ -1,8 +1,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{{- if hugo.IsProduction | or (eq site.Params.env "production") | and (ne .Params.robotsNoIndex true) }}
+{{- $isProduction := or hugo.IsProduction (eq site.Params.env "production") -}}
+{{- $isThinList := or (eq .Kind "taxonomy") (eq .Kind "term") (eq .Layout "archives") (in (slice "categories" "tags") .Section) -}}
+{{- $robotsNoIndex := or (eq .Params.robotsNoIndex true) $isThinList -}}
+{{- if and $isProduction (not $robotsNoIndex) }}
 <meta name="robots" content="index, follow">
+{{- else if $isProduction }}
+<meta name="robots" content="noindex, follow">
 {{- else }}
 <meta name="robots" content="noindex, nofollow">
 {{- end }}
@@ -138,6 +143,13 @@
 {{- range .AllTranslations -}}
 <link rel="alternate" hreflang="{{ .Language.LanguageCode | default .Lang }}" href="{{ .Permalink }}">
 {{ end -}}
+{{- $xDefault := site.Home.Permalink -}}
+{{- with .AllTranslations -}}
+{{- with index . 0 -}}
+{{- $xDefault = .Permalink -}}
+{{- end -}}
+{{- end -}}
+<link rel="alternate" hreflang="x-default" href="{{ $xDefault }}">
 
 <noscript>
     <style>
