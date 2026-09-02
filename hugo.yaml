@@ -47,51 +47,12 @@ languages:
           url: "archives"
           weight: 30
 
-  # 繁体中文
-  zt:
-    languageCode: zh-tw
-    languageName: "繁體中文"
-    contentDir: content/zt
-    weight: 2
-    title: "QingKong996"
-    params:
-      description: "QingKong996 的個人部落格，記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
-      keywords:
-        - "QingKong996"
-        - "開發實踐"
-        - "工具折騰"
-        - "程式設計部落格"
-        - "Hugo"
-      languageAltTitle: "繁體中文"
-      mainSections: ["posts"]
-      homeInfoParams:
-        Title: "QingKong996"
-        Content: "記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
-      seo:
-        homeTitle: "QingKong996 | 開發實踐、工具折騰與值得留下來的想法"
-        homeDescription: "QingKong996 的個人部落格，記錄開發實踐、工具折騰，以及一些值得留下來的想法。"
-      editPost:
-        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/zt"
-        Text: "改進這篇文章"
-        appendFilePath: true
-    menu:
-      main:
-        - name: "分類"
-          url: "categories"
-          weight: 10
-        - name: "標籤"
-          url: "tags"
-          weight: 20
-        - name: "歸檔"
-          url: "archives"
-          weight: 30
-
   # 英文
   en:
     languageCode: en
     languageName: "English"
     contentDir: content/en
-    weight: 3
+    weight: 2
     title: "QingKong996"
     params:
       description: "QingKong996's personal blog about development practice, tool experiments, and notes worth keeping."
@@ -122,84 +83,6 @@ languages:
           url: "tags"
           weight: 20
         - name: "Archives"
-          url: "archives"
-          weight: 30
-
-  # 俄语 (Russian)
-  ru:
-    languageCode: ru
-    languageName: "Русский"
-    contentDir: content/ru
-    weight: 4
-    title: "QingKong996"
-    params:
-      description: "Личный блог QingKong996 о практике разработки, инструментах и заметках, к которым хочется возвращаться."
-      keywords:
-        - "QingKong996"
-        - "разработка"
-        - "инструменты"
-        - "блог разработчика"
-        - "Hugo"
-      languageAltTitle: "Русский"
-      mainSections: ["posts"]
-      homeInfoParams:
-        Title: "QingKong996"
-        Content: "Заметки о разработке, инструментах и идеях, к которым хочется возвращаться."
-      seo:
-        homeTitle: "QingKong996 | Практика разработки, инструменты и заметки"
-        homeDescription: "Личный блог QingKong996 о практике разработки, инструментах и заметках, к которым хочется возвращаться."
-      editPost:
-        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/ru"
-        Text: "Предложить правку"
-        appendFilePath: true
-    menu:
-      main:
-        - name: "Категории"
-          url: "categories"
-          weight: 10
-        - name: "Теги"
-          url: "tags"
-          weight: 20
-        - name: "Архив"
-          url: "archives"
-          weight: 30
-
-  # 日语 (Japanese)
-  ja:
-    languageCode: ja
-    languageName: "日本語"
-    contentDir: content/ja
-    weight: 5
-    title: "QingKong996"
-    params:
-      description: "開発の実践、ツールの試行錯誤、あとで見返したくなるメモを記録する QingKong996 のブログです。"
-      keywords:
-        - "QingKong996"
-        - "開発実践"
-        - "ツール"
-        - "技術ブログ"
-        - "Hugo"
-      languageAltTitle: "日本語"
-      mainSections: ["posts"]
-      homeInfoParams:
-        Title: "QingKong996"
-        Content: "開発の記録やツールのメモ、あとで見返したくなる考えを残しています。"
-      seo:
-        homeTitle: "QingKong996 | 開発の実践、ツール、残しておきたいメモ"
-        homeDescription: "開発の実践、ツールの試行錯誤、あとで見返したくなるメモを記録する QingKong996 のブログです。"
-      editPost:
-        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/ja"
-        Text: "この記事を改善"
-        appendFilePath: true
-    menu:
-      main:
-        - name: "カテゴリー"
-          url: "categories"
-          weight: 10
-        - name: "タグ"
-          url: "tags"
-          weight: 20
-        - name: "アーカイブ"
           url: "archives"
           weight: 30
 
