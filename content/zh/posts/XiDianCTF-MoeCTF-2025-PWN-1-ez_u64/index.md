@@ -139,4 +139,4 @@ moectf{THIS_IS_FLAG}
 [*] Closed connection to 127.0.0.1 port 42704
 ```
 
-[^packer]:参考[Packing and unpacking of strings](https://docs.pwntools.com/en/stable/util/packing.html)
+[^packer]:[Packing and unpacking of strings](https://docs.pwntools.com/en/stable/util/packing.html)

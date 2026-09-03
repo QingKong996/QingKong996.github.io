@@ -1,5 +1,5 @@
 ---
-title: 'XiDianCTF MoeCTF 2025 PWN 1 Find_it'
+title: '西电CTF MoeCTF 2025 PWN 1 Find_it'
 date: '2026-09-02T16:42:29+08:00'
 lastmod: '2026-09-02T16:42:29+08:00'
 summary: ""
@@ -136,6 +136,6 @@ moectf{THIS_IS_FLAG}
 
 
 
-[^fd]:参考[File descriptor](https://en.wikipedia.org/wiki/File_descriptor)
-[^dup]:参考[dup (system call)](https://en.wikipedia.org/wiki/Dup_(system_call))
+[^fd]:[File descriptor](https://en.wikipedia.org/wiki/File_descriptor)
+[^dup]:[dup (system call)](https://en.wikipedia.org/wiki/Dup_(system_call))
 
