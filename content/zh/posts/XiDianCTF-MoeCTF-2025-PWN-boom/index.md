@@ -1,5 +1,5 @@
 ---
-title: 'XiDianCTF MoeCTF 2025 PWN Boom'
+title: '西电CTF MoeCTF 2025 PWN Boom'
 date: '2026-09-04T11:33:13+08:00'
 lastmod: '2026-09-04T11:33:13+08:00'
 summary: ""
