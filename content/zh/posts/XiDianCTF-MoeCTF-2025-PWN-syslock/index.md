@@ -14,7 +14,7 @@ tags:
 ---
 
 ```
-本文为人工撰写，使用生成式AI校对并整理知识点。
+本文为人工撰写，仅使用生成式AI校对。
 ```
 
 [题目链接](https://ctf.xidian.edu.cn/training/22?challenge=894)
