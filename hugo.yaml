@@ -16,7 +16,7 @@ languages:
     weight: 1
     title: "QingKong996"
     params:
-      description: "QingKong996 的个人博客，记录开发实践、工具折腾和一些值得留下来的想法。"
+      description: "QingKong996 的个人博客。"
       keywords:
         - "QingKong996"
         - "开发实践"
@@ -27,10 +27,10 @@ languages:
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: "记录开发实践、工具折腾和一些值得留下来的想法。"
+        Content: "25级人工智能本科生。"
       seo:
-        homeTitle: "QingKong996 | 开发实践、工具折腾与值得留下来的想法"
-        homeDescription: "QingKong996 的个人博客，记录开发实践、工具折腾和一些值得留下来的想法。"
+        homeTitle: "QingKong996's Blog"
+        homeDescription: "QingKong996 的个人博客。"
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/zh"
         Text: "改进这篇文章"
@@ -55,7 +55,7 @@ languages:
     weight: 2
     title: "QingKong996"
     params:
-      description: "QingKong996's personal blog about development practice, tool experiments, and notes worth keeping."
+      description: "QingKong996's personal blog."
       keywords:
         - "QingKong996"
         - "development practice"
@@ -66,10 +66,10 @@ languages:
       mainSections: ["posts"]
       homeInfoParams:
         Title: "QingKong996"
-        Content: "Notes on building, debugging, and keeping useful ideas worth revisiting."
+        Content: "An undergraduate student majoring in Artificial Intelligence, class of 2025."
       seo:
-        homeTitle: "QingKong996 | Development practice, tooling, and notes worth keeping"
-        homeDescription: "QingKong996's personal blog about development practice, tool experiments, and notes worth keeping."
+        homeTitle: "QingKong996's Blog"
+        homeDescription: "QingKong996's personal blog."
       editPost:
         URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/en"
         Text: "Improve this post"
@@ -89,7 +89,7 @@ languages:
 # --- 通用参数 (所有语言共享) ---
 params:
   author: "QingKong996"
-  description: "QingKong996 的个人博客，记录开发实践、工具折腾和一些值得留下来的想法。"
+  description: "QingKong996 的个人博客。"
   keywords:
     - "QingKong996"
     - "Developer Blog"
