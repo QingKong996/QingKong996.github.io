@@ -213,7 +213,7 @@ __int64 __fastcall pd(__int64 a1, unsigned __int64 a2)
 
 `libc.so.6`中`printf`偏移为`0x606F0`，而`system()`偏移为`0x50D70`，我们需要修改至少两个字节`:(`。
 
-> `fgets(buf, n, stdin)`只会读取**n - 1**字节，然后在后面添加`\n`。
+> `fgets(buf, n, stdin)`最多读取**n - 1**字节，然后在后面添加`\0`。
 >
 > 如果程序使用`fgets()`，务必严格构造字符串并考虑其长度和末尾，防止下一次的`fgets()`读取到上次的输入！
 
