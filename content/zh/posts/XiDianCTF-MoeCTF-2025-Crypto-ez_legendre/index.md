@@ -55,13 +55,13 @@ $$
 h = \left(a + \operatorname{int}(b)\cdot d\right)^e \bmod p
 $$
 
-当 \(b=0\) 时：
+当 $b=0$ 时：
 
 $$
 h = a^e \bmod p
 $$
 
-当 \(b=1\) 时：
+当 $b=1$ 时：
 
 $$
 h = (a+d)^e \bmod p
@@ -73,7 +73,7 @@ $$
 e=\operatorname{getPrime}(16)
 $$
 
-仅有 \(16\text{ bit}\)，搜索空间约为：
+仅有 $16\text{ bit}$，搜索空间约为：
 
 $$
 2^{16}
@@ -85,7 +85,7 @@ $$
 d\in[1,10]
 $$
 
-因此可以构造爆破字典，根据 \(h\) 反推出：
+因此可以构造爆破字典，根据 $h$ 反推出：
 
 $$
 h\longmapsto b\in\{0,1\}

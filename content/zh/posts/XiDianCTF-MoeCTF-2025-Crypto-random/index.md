@@ -95,11 +95,7 @@ $$
 由 `lfsr()`：
 
 $$
-R_{n+1}
-=
-\left(2L_n \bmod 2^l\right)
-+
-\mathrm{bit}
+R_{n+1} = \left(2L_n \bmod 2^l\right) + \mathrm{bit}
 $$
 
 因此可以通过
@@ -123,9 +119,7 @@ $$
 利用 `lfsr()` 的性质：
 
 $$
-\operatorname{parity}(L_n \oplus R_n)
-=
-R_{n+1} \bmod 2
+\operatorname{parity}(L_n \oplus R_n) = R_{n+1} \bmod 2
 $$
 
 因此可以检查两者是否相等，不满足条件的分支直接剪掉。
