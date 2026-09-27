@@ -47,45 +47,6 @@ languages:
           url: "archives"
           weight: 30
 
-  # 英文
-  en:
-    languageCode: en
-    languageName: "English"
-    contentDir: content/en
-    weight: 2
-    title: "QingKong996"
-    params:
-      description: "QingKong996's personal blog."
-      keywords:
-        - "QingKong996"
-        - "development practice"
-        - "developer blog"
-        - "tooling"
-        - "Hugo"
-      languageAltTitle: "English"
-      mainSections: ["posts"]
-      homeInfoParams:
-        Title: "QingKong996"
-        Content: "An undergraduate student majoring in Artificial Intelligence, class of 2025."
-      seo:
-        homeTitle: "QingKong996's Blog"
-        homeDescription: "QingKong996's personal blog."
-      editPost:
-        URL: "https://github.com/QingKong996/QingKong996.github.io/tree/main/content/en"
-        Text: "Improve this post"
-        appendFilePath: true
-    menu:
-      main:
-        - name: "Categories"
-          url: "categories"
-          weight: 10
-        - name: "Tags"
-          url: "tags"
-          weight: 20
-        - name: "Archives"
-          url: "archives"
-          weight: 30
-
 # --- 通用参数 (所有语言共享) ---
 params:
   author: "QingKong996"
