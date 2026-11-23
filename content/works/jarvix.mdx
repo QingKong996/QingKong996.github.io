@@ -1,0 +1,35 @@
+---
+title: "Jarvix"
+summary: "基于 Electron 与 React 构建的桌面端 AI Agent 工作台，参考 Codex、DeepSeek Harness、Magpie、OpenCode 与 Pi 设计。"
+year: "2026"
+category: "AI Agent / 桌面应用"
+status: "推进中"
+accent: "emerald"
+featured: true
+order: 1
+repoUrl: "https://github.com/QingKong996/jarvix"
+techStack:
+  - Electron
+  - React
+  - TypeScript
+  - pi-ai
+  - Sandbox Runtime
+  - Tailwind CSS
+---
+
+<Callout type="info" title="当前进度">
+  该项目目前仍处于持续开发与推进阶段（v0.1.0），核心模块、协议层与桌面交互仍在迭代完善中。
+</Callout>
+
+## 项目简介
+
+Jarvix 是一个面向编码与智能体工作流的桌面端 AI Agent 应用，在架构与交互设计上参考了 Codex、DeepSeek Harness、Magpie、OpenCode 和 Pi。
+
+## 模块结构
+
+| 目录 / 模块 | 职责与核心技术 |
+| --- | --- |
+| `src/main` & `src/preload` | Electron 桌面主进程与预加载桥接，集成 `@anthropic-ai/sandbox-runtime` 进行受控沙箱执行 |
+| `src/core`、`src/llm`、`src/protocol`、`src/runtime` | Agent 运行时、模型调用封装（`@earendil-works/pi-ai`）、协议定义与 Zod 结构校验 |
+| `src/renderer` & `src/i18n` | 基于 React 19、Tailwind CSS v4、Radix UI 与 `streamdown`（代码/数学公式/CJK 流式渲染）的多语言桌面界面 |
+| `tests/bombadil` | 使用 Vitest 与 `@antithesishq/bombadil` 进行单元测试与 UI 属性测试 |

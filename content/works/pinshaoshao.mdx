@@ -1,0 +1,34 @@
+---
+title: "pinshaoshao"
+summary: "基于 React + Vite + TypeScript 前端、Go + Gin 后端与 PostgreSQL 数据库的全栈电商学习实验平台。"
+year: "2026"
+category: "全栈应用"
+status: "推进中"
+accent: "sky"
+featured: true
+order: 2
+repoUrl: "https://github.com/QingKong996/pinshaoshao"
+techStack:
+  - Go
+  - Gin
+  - PostgreSQL
+  - React
+  - TypeScript
+  - Vite
+---
+
+<Callout type="info" title="当前进度与说明">
+  该项目目前仍在持续推进中，主要用于前后端工程与分层架构学习实验。pinshaoshao 为虚构名称，与任何真实公司、产品或组织无关。
+</Callout>
+
+## 项目简介
+
+pinshaoshao 是一个前后端分离的全栈电商实验项目，后端采用 **DDD + Clean Architecture** 架构风格与标准化结构日志（`slog`），配合独立的项目文档与端到端测试工具链。
+
+## 工程组成
+
+| 部分 | 目录 | 技术栈与实践 |
+| --- | --- | --- |
+| 后端服务 | `backend/cmd/server`、`backend/internal`、`backend/migrations` | Go 1.26、Gin、`pgx/v5`、PostgreSQL、`goose` 数据库迁移与 `testcontainers-go` 集成测试 |
+| 前端应用 | `frontend/src`、`frontend/e2e`、`frontend/.storybook` | React、Vite、TypeScript、Vitest、Playwright 端到端测试与 `dependency-cruiser` 依赖约束检查 |
+| 项目文档 | `docs/index.html` | 独立维护项目状态与接口文档 |

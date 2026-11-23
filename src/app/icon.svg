@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="55 55 250 250" role="img" aria-label="QingKong">
+  <style>
+    .q-body { fill: #09090b; }
+    .q-accent { fill: #059669; }
+    @media (prefers-color-scheme: dark) {
+      .q-body { fill: #fafafa; }
+      .q-accent { fill: #34d399; }
+    }
+  </style>
+  <path class="q-body" fill-rule="evenodd" d="M123 55H231A70 70 0 0 1 299 123V231A70 70 0 0 1 231 299H123A70 70 0 0 1 55 231V123A70 70 0 0 1 123 55ZM239 177A62 62 0 1 1 115 177A62 62 0 1 1 239 177Z"/>
+  <rect class="q-accent" x="228" y="228" width="77" height="77" rx="6"/>
+</svg>

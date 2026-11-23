@@ -1,0 +1,291 @@
+---
+title: "[示例文章] Markdown、MDX 排版与交互动画演示"
+description: "用于展示本站文章渲染能力的占位示例模板（非作者正式文章）：仅在单篇 .mdx 文件内使用通用组件、内联 JSX、SVG 矢量动画与纯 CSS 状态切换，不向博客主体注入特化代码。"
+date: "2026-11-23"
+draft: false
+featured: false
+---
+
+<Callout type="warning" title="示例文章说明">
+  本文为**占位示例模板**，仅用于演示博客的单文件排版与交互能力，并非作者本人撰写的正式文章。文中除调用项目内置的通用组件（`Callout`、`MetricGrid`、`MetricCard`）外，所有交互与动画均内聚在当前 `.mdx` 文件自身，不污染博客主体代码。
+</Callout>
+
+## 基础排版与目录结构
+
+左侧目录栏会自动提取正文中的二级标题（`##`）与三级标题（`###`）并生成跳转锚点。
+
+### 文本、引用与任务列表
+
+支持标准 Markdown 语法，包括 **加粗**、*斜体*、`行内代码` 以及外部链接。
+
+> 这是一段示例引用块（Blockquote），可用于标注背景说明或补充提示。
+
+- [x] 文章保持单文件自包含，无博客主体特化组件依赖
+- [x] 支持通用内置组件（`<Callout>`、`<MetricGrid>`）与标准 Markdown
+- [x] 支持 GFM 表格、KaTeX 数学公式与 Shiki 代码高亮
+- [ ] 在 `content/posts/` 中新增正式文章后即可自动收录
+
+## 交互动画 1：无依赖状态切换面板
+
+以下演示完全基于原生单选框与 CSS 状态选择器编写在当前 `.mdx` 内，点击顶部步骤标签可平滑切换阶段内容：
+
+<div className="not-prose my-8 overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#111113]">
+  <style dangerouslySetInnerHTML={{ __html: `
+    .mdx-tab-panel { display: none; animation: mdxFadeUp 260ms cubic-bezier(0.22, 1, 0.36, 1); }
+    #mdx-pipe-1:checked ~ .mdx-tab-bar label[for="mdx-pipe-1"],
+    #mdx-pipe-2:checked ~ .mdx-tab-bar label[for="mdx-pipe-2"],
+    #mdx-pipe-3:checked ~ .mdx-tab-bar label[for="mdx-pipe-3"],
+    #mdx-pipe-4:checked ~ .mdx-tab-bar label[for="mdx-pipe-4"] {
+      color: #059669;
+      box-shadow: inset 0 -2px 0 0 #059669;
+    }
+    .dark #mdx-pipe-1:checked ~ .mdx-tab-bar label[for="mdx-pipe-1"],
+    .dark #mdx-pipe-2:checked ~ .mdx-tab-bar label[for="mdx-pipe-2"],
+    .dark #mdx-pipe-3:checked ~ .mdx-tab-bar label[for="mdx-pipe-3"],
+    .dark #mdx-pipe-4:checked ~ .mdx-tab-bar label[for="mdx-pipe-4"] {
+      color: #34d399;
+      box-shadow: inset 0 -2px 0 0 #34d399;
+    }
+    #mdx-pipe-1:checked ~ .mdx-tab-body .mdx-panel-1,
+    #mdx-pipe-2:checked ~ .mdx-tab-body .mdx-panel-2,
+    #mdx-pipe-3:checked ~ .mdx-tab-body .mdx-panel-3,
+    #mdx-pipe-4:checked ~ .mdx-tab-body .mdx-panel-4 {
+      display: block;
+    }
+    @keyframes mdxFadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  ` }} />
+  <input id="mdx-pipe-1" type="radio" name="mdx-pipe" defaultChecked className="sr-only" />
+  <input id="mdx-pipe-2" type="radio" name="mdx-pipe" className="sr-only" />
+  <input id="mdx-pipe-3" type="radio" name="mdx-pipe" className="sr-only" />
+  <input id="mdx-pipe-4" type="radio" name="mdx-pipe" className="sr-only" />
+  <div className="mdx-tab-bar grid grid-cols-2 divide-x divide-y divide-zinc-200 border-b border-zinc-200 sm:grid-cols-4 sm:divide-y-0 dark:divide-zinc-800 dark:border-zinc-800">
+    <label htmlFor="mdx-pipe-1" className="cursor-pointer px-4 py-3 text-left text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+      <span className="block font-mono text-[10px] opacity-70">01 / INPUT</span>
+      <span className="mt-1 block text-sm">单文件源码</span>
+    </label>
+    <label htmlFor="mdx-pipe-2" className="cursor-pointer px-4 py-3 text-left text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+      <span className="block font-mono text-[10px] opacity-70">02 / PARSE</span>
+      <span className="mt-1 block text-sm">Remark + Math</span>
+    </label>
+    <label htmlFor="mdx-pipe-3" className="cursor-pointer px-4 py-3 text-left text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+      <span className="block font-mono text-[10px] opacity-70">03 / RENDER</span>
+      <span className="mt-1 block text-sm">Rehype + KaTeX</span>
+    </label>
+    <label htmlFor="mdx-pipe-4" className="cursor-pointer px-4 py-3 text-left text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+      <span className="block font-mono text-[10px] opacity-70">04 / OUTPUT</span>
+      <span className="mt-1 block text-sm">零耦合交付</span>
+    </label>
+  </div>
+  <div className="mdx-tab-body px-5 py-5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+    <div className="mdx-tab-panel mdx-panel-1">
+      <p className="font-mono text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Step 01 · Authoring</p>
+      <p className="mt-2">所有正文、公式、图表与局部交互全部写在单一 <code>.mdx</code> 文件内，文章可随目录迁移或归档，不依赖博客主体源码中的特化演示组件。</p>
+    </div>
+    <div className="mdx-tab-panel mdx-panel-2">
+      <p className="font-mono text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Step 02 · Syntax Tree</p>
+      <p className="mt-2">编译器通过 <code>remark-gfm</code> 与 <code>remark-math</code> 解析表格、任务列表与 LaTeX 数学语法，同时保留文档内联的原生 HTML/SVG 交互标签。</p>
+    </div>
+    <div className="mdx-tab-panel mdx-panel-3">
+      <p className="font-mono text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Step 03 · Transform</p>
+      <p className="mt-2"><code>rehype-slug</code> 自动生成标题锚点与左侧目录树，<code>rehype-katex</code> 与 <code>rehype-pretty-code</code> 完成公式排版及双主题代码着色。</p>
+    </div>
+    <div className="mdx-tab-panel mdx-panel-4">
+      <p className="font-mono text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Step 04 · Clean Architecture</p>
+      <p className="mt-2">博客主体仅维护全局统一的通用原语（如 <code>Callout</code> 与 <code>MetricGrid</code>），单篇文章的实验性动画随时增删而不影响其他页面。</p>
+    </div>
+  </div>
+</div>
+
+## 交互动画 2：内联 SVG 矢量信号拓扑与速率切换
+
+下方是一段直接写在 `.mdx` 中的 SVG SMIL 矢量动画：信号脉冲沿正交电路轨迹循环流动，点击右上角开关可切换“低频巡检 / 高频并发”两种节奏并即时改变波形显示：
+
+<div className="not-prose my-8 overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#111113]">
+  <style dangerouslySetInnerHTML={{ __html: `
+    .mdx-pulse-fast { opacity: 0.12; transition: opacity 250ms ease; }
+    #mdx-turbo:checked ~ .mdx-svg-stage .mdx-pulse-fast { opacity: 1; }
+    #mdx-turbo:checked ~ .mdx-svg-bar label[for="mdx-turbo"] {
+      background-color: #059669;
+      color: #ffffff;
+    }
+    .dark #mdx-turbo:checked ~ .mdx-svg-bar label[for="mdx-turbo"] {
+      background-color: #34d399;
+      color: #09090b;
+    }
+    .mdx-node-ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: mdxRingPulse 2.6s ease-in-out infinite;
+    }
+    @keyframes mdxRingPulse {
+      0%, 100% { transform: scale(1); opacity: 0.45; }
+      50% { transform: scale(1.35); opacity: 0.1; }
+    }
+  ` }} />
+  <input id="mdx-turbo" type="checkbox" className="sr-only" />
+  <div className="mdx-svg-bar flex items-center justify-between border-b border-zinc-200 px-5 py-3 dark:border-zinc-800">
+    <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
+      Signal Topology · Inline SVG
+    </span>
+    <label htmlFor="mdx-turbo" className="cursor-pointer rounded-full border border-zinc-300 px-3 py-1 font-mono text-[11px] font-medium text-zinc-700 transition-colors hover:border-emerald-500 dark:border-zinc-700 dark:text-zinc-300">
+      切换高频并发脉冲
+    </label>
+  </div>
+  <div className="mdx-svg-stage px-4 py-5">
+    <svg viewBox="0 0 680 180" className="w-full" role="img" aria-label="正交信号流矢量动画示例">
+      <defs>
+        <path id="mdx-route-a" d="M 56 52 H 210 L 246 88 H 430 L 466 52 H 624" />
+        <path id="mdx-route-b" d="M 56 128 H 184 L 220 92 H 442 L 478 128 H 624" />
+      </defs>
+      <g stroke="currentColor" className="text-zinc-200 dark:text-zinc-800" strokeWidth="1.5" fill="none">
+        <use href="#mdx-route-a" />
+        <use href="#mdx-route-b" />
+        <line x1="336" y1="36" x2="336" y2="144" strokeDasharray="3 4" />
+      </g>
+      <circle r="4" fill="#10b981">
+        <animateMotion dur="3.4s" repeatCount="indefinite">
+          <mpath href="#mdx-route-a" />
+        </animateMotion>
+      </circle>
+      <circle r="3.5" fill="#34d399" className="mdx-pulse-fast">
+        <animateMotion dur="1.7s" begin="0.4s" repeatCount="indefinite">
+          <mpath href="#mdx-route-a" />
+        </animateMotion>
+      </circle>
+      <circle r="4" fill="#10b981">
+        <animateMotion dur="4.0s" begin="0.8s" repeatCount="indefinite">
+          <mpath href="#mdx-route-b" />
+        </animateMotion>
+      </circle>
+      <circle r="3.5" fill="#34d399" className="mdx-pulse-fast">
+        <animateMotion dur="1.9s" begin="1.1s" repeatCount="indefinite">
+          <mpath href="#mdx-route-b" />
+        </animateMotion>
+      </circle>
+      <g className="text-zinc-700 dark:text-zinc-200" fontFamily="monospace" fontSize="11">
+        <circle cx="56" cy="52" r="10" fill="none" stroke="#10b981" strokeWidth="1.2" className="mdx-node-ring" />
+        <circle cx="56" cy="52" r="5" fill="#10b981" />
+        <text x="42" y="30" fill="currentColor">SRC A</text>
+        <circle cx="56" cy="128" r="5" fill="currentColor" />
+        <text x="42" y="156" fill="currentColor">SRC B</text>
+        <rect x="306" y="72" width="60" height="36" rx="8" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <text x="319" y="94" fill="currentColor">ROUTER</text>
+        <circle cx="624" cy="52" r="5" fill="#10b981" />
+        <text x="606" y="30" fill="currentColor">SINK 1</text>
+        <circle cx="624" cy="128" r="5" fill="currentColor" />
+        <text x="606" y="156" fill="currentColor">SINK 2</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+## 交互动画 3：动态分布对比图与折叠展开
+
+点击切换不同的样本分布模式，柱状条将以弹性缓动曲线实时重排高度：
+
+<div className="not-prose my-8 overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#111113]">
+  <style dangerouslySetInnerHTML={{ __html: `
+    .mdx-bar {
+      transition: height 520ms cubic-bezier(0.22, 1, 0.36, 1), background-color 240ms ease;
+    }
+    #mdx-dist-uniform:checked ~ .mdx-dist-head label[for="mdx-dist-uniform"],
+    #mdx-dist-peak:checked ~ .mdx-dist-head label[for="mdx-dist-peak"],
+    #mdx-dist-decay:checked ~ .mdx-dist-head label[for="mdx-dist-decay"] {
+      background-color: #09090b;
+      color: #ffffff;
+    }
+    .dark #mdx-dist-uniform:checked ~ .mdx-dist-head label[for="mdx-dist-uniform"],
+    .dark #mdx-dist-peak:checked ~ .mdx-dist-head label[for="mdx-dist-peak"],
+    .dark #mdx-dist-decay:checked ~ .mdx-dist-head label[for="mdx-dist-decay"] {
+      background-color: #f4f4f5;
+      color: #09090b;
+    }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b1 { height: 58%; }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b2 { height: 64%; }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b3 { height: 52%; }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b4 { height: 66%; }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b5 { height: 60%; }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b6 { height: 55%; }
+    #mdx-dist-uniform:checked ~ .mdx-bars .b7 { height: 62%; }
+
+    #mdx-dist-peak:checked ~ .mdx-bars .b1 { height: 20%; }
+    #mdx-dist-peak:checked ~ .mdx-bars .b2 { height: 42%; }
+    #mdx-dist-peak:checked ~ .mdx-bars .b3 { height: 74%; }
+    #mdx-dist-peak:checked ~ .mdx-bars .b4 { height: 96%; background-color: #10b981; }
+    #mdx-dist-peak:checked ~ .mdx-bars .b5 { height: 70%; }
+    #mdx-dist-peak:checked ~ .mdx-bars .b6 { height: 38%; }
+    #mdx-dist-peak:checked ~ .mdx-bars .b7 { height: 18%; }
+
+    #mdx-dist-decay:checked ~ .mdx-bars .b1 { height: 92%; background-color: #10b981; }
+    #mdx-dist-decay:checked ~ .mdx-bars .b2 { height: 72%; }
+    #mdx-dist-decay:checked ~ .mdx-bars .b3 { height: 56%; }
+    #mdx-dist-decay:checked ~ .mdx-bars .b4 { height: 42%; }
+    #mdx-dist-decay:checked ~ .mdx-bars .b5 { height: 30%; }
+    #mdx-dist-decay:checked ~ .mdx-bars .b6 { height: 22%; }
+    #mdx-dist-decay:checked ~ .mdx-bars .b7 { height: 14%; }
+  ` }} />
+  <input id="mdx-dist-uniform" type="radio" name="mdx-dist" className="sr-only" />
+  <input id="mdx-dist-peak" type="radio" name="mdx-dist" defaultChecked className="sr-only" />
+  <input id="mdx-dist-decay" type="radio" name="mdx-dist" className="sr-only" />
+  <div className="mdx-dist-head flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 px-5 py-3 dark:border-zinc-800">
+    <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
+      Distribution Morphing
+    </span>
+    <div className="flex items-center gap-1.5 text-xs">
+      <label htmlFor="mdx-dist-uniform" className="cursor-pointer rounded-full px-3 py-1 text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100">均匀分布</label>
+      <label htmlFor="mdx-dist-peak" className="cursor-pointer rounded-full px-3 py-1 text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100">单峰分布</label>
+      <label htmlFor="mdx-dist-decay" className="cursor-pointer rounded-full px-3 py-1 text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100">指数衰减</label>
+    </div>
+  </div>
+  <div className="mdx-bars flex h-44 items-end gap-3 px-6 py-5">
+    <div className="mdx-bar b1 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+    <div className="mdx-bar b2 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+    <div className="mdx-bar b3 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+    <div className="mdx-bar b4 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+    <div className="mdx-bar b5 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+    <div className="mdx-bar b6 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+    <div className="mdx-bar b7 flex-1 rounded-t-md bg-zinc-300 dark:bg-zinc-700" />
+  </div>
+  <details className="border-t border-zinc-200 px-5 py-3 text-xs text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
+    <summary className="cursor-pointer font-medium text-zinc-800 dark:text-zinc-200">
+      展开查看实现原理说明
+    </summary>
+    <p className="mt-2 leading-relaxed">
+      整个图表仅通过当前 <code>.mdx</code> 内部的单选框、原生 CSS 属性过渡与弹性贝塞尔曲线实现，无需在博客组件库中新增专用可视化代码。
+    </p>
+  </details>
+</div>
+
+## LaTeX 与表格示例
+
+行内公式示例：欧拉恒等式 $e^{i\pi} + 1 = 0$，以及时间复杂度 $O(n \log n)$。
+
+块级公式示例（高斯积分）：
+
+$$
+\int_{-\infty}^{+\infty} e^{-x^2} \, dx = \sqrt{\pi}
+$$
+
+| 模块 | 语法 / 组件 | 说明 |
+| --- | --- | --- |
+| 数学公式 | `$...$` / `$$...$$` | 基于 KaTeX 渲染行内与块级公式 |
+| 代码片段 | 三反引号语言标记 | 支持语法高亮与一键复制 |
+| 通用组件 | `<Callout>`、`<MetricGrid>` | 来自博客主体的通用排版组件 |
+
+## 代码高亮示例
+
+```ts
+// 示例：用于演示代码块高亮与复制按钮的通用片段
+export function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+```
+
+<MetricGrid>
+  <MetricCard label="示例标签 A" value="GFM + KaTeX" note="表格 / 任务列表 / 公式" />
+  <MetricCard label="示例标签 B" value="Single-File" note="内聚动画 / 零主体特化耦合" />
+  <MetricCard label="示例标签 C" value="Sticky TOC" note="自动提取 H2 / H3 目录" />
+</MetricGrid>

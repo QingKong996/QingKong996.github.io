@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "search:index": "pagefind --site .next/server/app --output-path public/pagefind"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -33,6 +35,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "pagefind": "^1.6.0",
     "prettier": "^3.10.1",
     "shadcn": "^4.23.0",
     "tailwindcss": "4.3.3",
