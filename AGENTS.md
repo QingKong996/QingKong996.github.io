@@ -7,3 +7,37 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+## git规范
+任何非只读git操作需要得到用户批准.
+
+不要直接向主分支提交.
+
+PR使用Why(为什么修改),What(修改了什么),How(如何验证),Tests(测试变更)格式.
+
+## 风格规范
+遵循代码库原有风格和惯例规范.
+
+组件优先使用完备的第三方库/组件,功能足够时不要手搓.
+
+日志框架使用slog,不要手写printf.
+
+禁止大段注释,注释仅用于标注代码段不包含的信息.
+
+使用英文注释.
+
+使用独立的文档记录项目情况,不要写进README.md中.
+
+应考虑当前状况和需求,禁止过度考虑未来.
+
+## 测试规范
+禁止将测试耦合到正常业务代码中.
+
+禁止频繁测试.
+
+禁止为删除的功能编写回归测试.
+
+## 行为规范
+禁止顺手修复问题修改代码.
+
+## 架构规范
+使用DDD + Clean Architecture架构.

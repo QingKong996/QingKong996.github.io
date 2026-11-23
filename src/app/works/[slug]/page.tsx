@@ -35,10 +35,12 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
     notFound();
   }
 
-  const renderedContent = await renderMdxContent(work.content, work.format);
+  const { content: renderedContent } = await renderMdxContent(work.content, work.format);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      {/* eslint-disable-next-line @next/next/no-css-tags */}
+      <link rel="stylesheet" href="/katex/katex.min.css" precedence="default" />
       <Link
         href="/works"
         className="group inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
