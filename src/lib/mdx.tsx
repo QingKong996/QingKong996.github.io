@@ -53,12 +53,18 @@ function collectHeadingsFromHast(node: HastNode, out: TocHeading[]) {
 }
 
 export async function renderMdxContent(source: string, format: ContentFormat = "mdx") {
+  const headings: TocHeading[] = [];
+  const collectPlugin = () => (tree: HastNode) => {
+    collectHeadingsFromHast(tree, headings);
+  };
+
   const { default: Content } = await evaluate(source, {
     ...runtime,
     format,
     remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [
       rehypeSlug,
+      collectPlugin,
       [
         rehypeAutolinkHeadings,
         {
@@ -82,24 +88,8 @@ export async function renderMdxContent(source: string, format: ContentFormat = "
     ],
   });
 
-  return <Content components={mdxComponents} />;
-}
-
-export async function extractMdxHeadings(
-  source: string,
-  format: ContentFormat = "mdx"
-): Promise<TocHeading[]> {
-  const headings: TocHeading[] = [];
-  const collectPlugin = () => (tree: HastNode) => {
-    collectHeadingsFromHast(tree, headings);
+  return {
+    content: <Content components={mdxComponents} />,
+    headings,
   };
-
-  await evaluate(source, {
-    ...runtime,
-    format,
-    remarkPlugins: [remarkGfm, remarkMath],
-    rehypePlugins: [rehypeSlug, collectPlugin],
-  });
-
-  return headings;
 }

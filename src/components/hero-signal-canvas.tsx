@@ -90,6 +90,8 @@ export function HeroSignalCanvas({
     let nextSnakeId = 1;
     let rafId = 0;
     let lastTime = performance.now();
+    let animationRunning = false;
+    let canvasVisible = true;
 
     const toPxX = (col: number) => originX + col * cellSize;
     const toPxY = (row: number) => originY + row * cellSize;
@@ -193,7 +195,8 @@ export function HeroSignalCanvas({
       for (let attempt = 0; attempt < 48; attempt++) {
         const tc = minCol + 1 + Math.floor(Math.random() * cSpan);
         const tr = minRow + 1 + Math.floor(Math.random() * rSpan);
-        const td = CARDINAL_DIRS[Math.floor(Math.random() * CARDINAL_DIRS.length)];
+        const td =
+          CARDINAL_DIRS[Math.floor(Math.random() * CARDINAL_DIRS.length)];
         const p0Blocked = isBlockedCell(tc, tr);
         const p1Blocked = isBlockedCell(tc - td.dc, tr - td.dr);
         const p2Blocked = isBlockedCell(tc - td.dc * 2, tr - td.dr * 2);
@@ -286,11 +289,11 @@ export function HeroSignalCanvas({
 
         const snapCol = Math.max(
           minCol,
-          Math.min(maxCol, Math.round((localX - originX) / cellSize))
+          Math.min(maxCol, Math.round((localX - originX) / cellSize)),
         );
         const snapRow = Math.max(
           minRow,
-          Math.min(maxRow, Math.round((localY - originY) / cellSize))
+          Math.min(maxRow, Math.round((localY - originY) / cellSize)),
         );
         if (
           !isBlockedCell(snapCol, snapRow) &&
@@ -340,17 +343,25 @@ export function HeroSignalCanvas({
       }
 
       const straightCandidate = candidates.find(
-        (d) => d.dc === snake.dir.dc && d.dr === snake.dir.dr
+        (d) => d.dc === snake.dir.dc && d.dr === snake.dir.dr,
       );
 
       // Helper: measure how crowded candidate cell (nc, nr) is with other snakes
-      const crowdPenaltyAt = (nc: number, nr: number, ignorePoint?: GridPoint | null) => {
+      const crowdPenaltyAt = (
+        nc: number,
+        nr: number,
+        ignorePoint?: GridPoint | null,
+      ) => {
         let penalty = 0;
         for (const other of snakes) {
           if (other.id === snake.id) continue;
           for (let idx = 0; idx < other.nodes.length; idx++) {
             const seg = other.nodes[idx];
-            if (ignorePoint && seg.col === ignorePoint.col && seg.row === ignorePoint.row) {
+            if (
+              ignorePoint &&
+              seg.col === ignorePoint.col &&
+              seg.row === ignorePoint.row
+            ) {
               continue;
             }
             const d = Math.abs(seg.col - nc) + Math.abs(seg.row - nr);
@@ -386,7 +397,8 @@ export function HeroSignalCanvas({
           const startIdx = snake.nodes.length >= other.nodes.length ? 0 : 1;
           for (let idx = startIdx; idx < other.nodes.length; idx++) {
             const seg = other.nodes[idx];
-            const d = Math.abs(seg.col - head.col) + Math.abs(seg.row - head.row);
+            const d =
+              Math.abs(seg.col - head.col) + Math.abs(seg.row - head.row);
             if (d <= MAX_PREY_SIGHT) {
               const cost = d * 1.35;
               if (cost < bestTargetCost) {
@@ -403,7 +415,9 @@ export function HeroSignalCanvas({
         if (straightCandidate && Math.random() < 0.72) {
           const snc = head.col + straightCandidate.dc;
           const snr = head.row + straightCandidate.dr;
-          const hitsSelf = snake.nodes.some((n) => n.col === snc && n.row === snr);
+          const hitsSelf = snake.nodes.some(
+            (n) => n.col === snc && n.row === snr,
+          );
           if (!hitsSelf && crowdPenaltyAt(snc, snr) < 3.5) {
             return straightCandidate;
           }
@@ -414,7 +428,9 @@ export function HeroSignalCanvas({
         for (const d of candidates) {
           const nc = head.col + d.dc;
           const nr = head.row + d.dr;
-          const hitsSelf = snake.nodes.some((n) => n.col === nc && n.row === nr);
+          const hitsSelf = snake.nodes.some(
+            (n) => n.col === nc && n.row === nr,
+          );
           const isTurn = d.dc !== snake.dir.dc || d.dr !== snake.dir.dr;
           const score =
             crowdPenaltyAt(nc, nr) +
@@ -442,7 +458,7 @@ export function HeroSignalCanvas({
             other.id !== snake.id &&
             other.nodes.length > snake.nodes.length &&
             other.nodes[0].col === nc &&
-            other.nodes[0].row === nr
+            other.nodes[0].row === nr,
         );
         const score =
           dist +
@@ -493,7 +509,14 @@ export function HeroSignalCanvas({
 
       // 2. Intersection crosshairs + cursor snap reticle
       let nearestSnap: { x: number; y: number; dist: number } | null = null;
+      const proximityCrosshairs: Array<{
+        x: number;
+        y: number;
+        proximity: number;
+      }> = [];
 
+      ctx.strokeStyle = `rgba(${lineRgb}, ${isDark ? "0.12" : "0.13"})`;
+      ctx.beginPath();
       for (let r = startRow; r <= endRow; r++) {
         for (let c = startCol; c <= endCol; c++) {
           const x = toPxX(c);
@@ -513,27 +536,34 @@ export function HeroSignalCanvas({
           }
 
           if (proximity > 0.05) {
-            ctx.strokeStyle = `rgba(${accentRgb}, ${(0.22 + proximity * 0.6).toFixed(3)})`;
-            const arm = 3 + proximity * 4;
-            ctx.beginPath();
-            ctx.moveTo(x - arm, y);
-            ctx.lineTo(x + arm, y);
-            ctx.moveTo(x, y - arm);
-            ctx.lineTo(x, y + arm);
-            ctx.stroke();
+            proximityCrosshairs.push({ x, y, proximity });
           } else {
-            ctx.strokeStyle = `rgba(${lineRgb}, ${isDark ? "0.12" : "0.13"})`;
-            ctx.beginPath();
             ctx.moveTo(x - 2.5, y);
             ctx.lineTo(x + 2.5, y);
             ctx.moveTo(x, y - 2.5);
             ctx.lineTo(x, y + 2.5);
-            ctx.stroke();
           }
         }
       }
+      ctx.stroke();
 
-      if (pointer.active && nearestSnap && nearestSnap.dist < 72 && !prefersReduced) {
+      for (const crosshair of proximityCrosshairs) {
+        ctx.strokeStyle = `rgba(${accentRgb}, ${(0.22 + crosshair.proximity * 0.6).toFixed(3)})`;
+        const arm = 3 + crosshair.proximity * 4;
+        ctx.beginPath();
+        ctx.moveTo(crosshair.x - arm, crosshair.y);
+        ctx.lineTo(crosshair.x + arm, crosshair.y);
+        ctx.moveTo(crosshair.x, crosshair.y - arm);
+        ctx.lineTo(crosshair.x, crosshair.y + arm);
+        ctx.stroke();
+      }
+
+      if (
+        pointer.active &&
+        nearestSnap &&
+        nearestSnap.dist < 72 &&
+        !prefersReduced
+      ) {
         const sx = nearestSnap.x;
         const sy = nearestSnap.y;
         const s = 10;
@@ -561,7 +591,12 @@ export function HeroSignalCanvas({
           ctx.strokeStyle = `rgba(${accentRgb}, ${(0.18 + pulse * 0.25).toFixed(3)})`;
           ctx.lineWidth = 1;
           const haloSize = 4 + pulse * 2.5;
-          ctx.strokeRect(fx - haloSize, fy - haloSize, haloSize * 2, haloSize * 2);
+          ctx.strokeRect(
+            fx - haloSize,
+            fy - haloSize,
+            haloSize * 2,
+            haloSize * 2,
+          );
 
           ctx.fillStyle = `rgba(${accentRgb}, ${(0.45 + pulse * 0.4).toFixed(3)})`;
           ctx.fillRect(fx - 2, fy - 2, 4, 4);
@@ -575,7 +610,8 @@ export function HeroSignalCanvas({
           for (const node of nodesToDrop) {
             if (dropped >= limit || foods.length >= 12) break;
             const tooCloseToFood = foods.some(
-              (f) => Math.abs(f.col - node.col) + Math.abs(f.row - node.row) <= 2
+              (f) =>
+                Math.abs(f.col - node.col) + Math.abs(f.row - node.row) <= 2,
             );
             if (!tooCloseToFood && !isBlockedCell(node.col, node.row)) {
               foods.push({
@@ -597,7 +633,7 @@ export function HeroSignalCanvas({
             const head = s.nodes[0];
 
             const eatenIndex = foods.findIndex(
-              (f) => f.col === head.col && f.row === head.row
+              (f) => f.col === head.col && f.row === head.row,
             );
             if (eatenIndex !== -1) {
               bursts.push({
@@ -619,7 +655,7 @@ export function HeroSignalCanvas({
               if (j === i) continue;
               const other = snakes[j];
               const hitIdx = other.nodes.findIndex(
-                (n) => n.col === head.col && n.row === head.row
+                (n) => n.col === head.col && n.row === head.row,
               );
               if (hitIdx === -1) continue;
 
@@ -683,20 +719,23 @@ export function HeroSignalCanvas({
           const headTarget = activeSnake.nodes[0];
           const headPrev = activeSnake.nodes[1];
           const headX = toPxX(
-            headPrev.col + (headTarget.col - headPrev.col) * activeSnake.progress
+            headPrev.col +
+              (headTarget.col - headPrev.col) * activeSnake.progress,
           );
           const headY = toPxY(
-            headPrev.row + (headTarget.row - headPrev.row) * activeSnake.progress
+            headPrev.row +
+              (headTarget.row - headPrev.row) * activeSnake.progress,
           );
 
           const tailLast = activeSnake.nodes[activeSnake.nodes.length - 1];
           const tailNext = activeSnake.nodes[activeSnake.nodes.length - 2];
-          const tailProgress = activeSnake.growing > 0 ? 0 : activeSnake.progress;
+          const tailProgress =
+            activeSnake.growing > 0 ? 0 : activeSnake.progress;
           const tailX = toPxX(
-            tailLast.col + (tailNext.col - tailLast.col) * tailProgress
+            tailLast.col + (tailNext.col - tailLast.col) * tailProgress,
           );
           const tailY = toPxY(
-            tailLast.row + (tailNext.row - tailLast.row) * tailProgress
+            tailLast.row + (tailNext.row - tailLast.row) * tailProgress,
           );
 
           const isLarge = activeSnake.nodes.length >= 8;
@@ -712,7 +751,7 @@ export function HeroSignalCanvas({
           for (let k = 1; k < activeSnake.nodes.length - 1; k++) {
             ctx.lineTo(
               toPxX(activeSnake.nodes[k].col),
-              toPxY(activeSnake.nodes[k].row)
+              toPxY(activeSnake.nodes[k].row),
             );
           }
           ctx.lineTo(tailX, tailY);
@@ -762,17 +801,53 @@ export function HeroSignalCanvas({
         ctx.strokeRect(rp.x - radius, rp.y - radius, radius * 2, radius * 2);
       }
 
-      if (!prefersReduced) {
+      if (animationRunning) {
         rafId = requestAnimationFrame(draw);
       }
     };
 
-    rafId = requestAnimationFrame(draw);
+    const startAnimation = () => {
+      if (prefersReduced || animationRunning) return;
+      animationRunning = true;
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(draw);
+    };
+
+    const stopAnimation = () => {
+      animationRunning = false;
+      cancelAnimationFrame(rafId);
+    };
+
+    const syncAnimation = () => {
+      if (canvasVisible && !document.hidden) {
+        startAnimation();
+      } else {
+        stopAnimation();
+      }
+    };
+
+    let intersectionObserver: IntersectionObserver | null = null;
+    if (prefersReduced) {
+      rafId = requestAnimationFrame(draw);
+    } else {
+      intersectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          canvasVisible = entry?.isIntersecting ?? false;
+          syncAnimation();
+        },
+        { rootMargin: "100px 0px" },
+      );
+      intersectionObserver.observe(canvas);
+      document.addEventListener("visibilitychange", syncAnimation);
+      syncAnimation();
+    }
 
     return () => {
-      cancelAnimationFrame(rafId);
+      stopAnimation();
       observer.disconnect();
+      intersectionObserver?.disconnect();
       window.removeEventListener("click", handleWindowClick);
+      document.removeEventListener("visibilitychange", syncAnimation);
     };
   }, [theme, mounted, prefersReduced, pointerRef, alignRef, excludeRef]);
 

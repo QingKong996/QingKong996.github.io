@@ -87,6 +87,7 @@ export function SearchModal({ open, onClose, documents }: SearchModalProps) {
   const [scope, setScope] = useState<SearchScope>("all");
   const [activeIndex, setActiveIndex] = useState(0);
   const [pagefindResults, setPagefindResults] = useState<SearchResultItem[] | null>(null);
+  const keyboardStateRef = useRef({ results: [] as SearchResultItem[], activeIndex: 0 });
 
   const localResults = useMemo(
     () => searchLocalDocuments(documents, query, scope),
@@ -173,29 +174,44 @@ export function SearchModal({ open, onClose, documents }: SearchModalProps) {
   };
 
   useEffect(() => {
+    keyboardStateRef.current = { results, activeIndex };
+  }, [results, activeIndex]);
+
+  useEffect(() => {
     if (!open) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      const keyboardState = keyboardStateRef.current;
       if (event.key === "Escape") {
         event.preventDefault();
         onClose();
       } else if (event.key === "ArrowDown") {
         event.preventDefault();
-        setActiveIndex((prev) => (results.length ? (prev + 1) % results.length : 0));
+        setActiveIndex((prev) =>
+          keyboardState.results.length
+            ? (prev + 1) % keyboardState.results.length
+            : 0
+        );
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         setActiveIndex((prev) =>
-          results.length ? (prev - 1 + results.length) % results.length : 0
+          keyboardState.results.length
+            ? (prev - 1 + keyboardState.results.length) %
+              keyboardState.results.length
+            : 0
         );
-      } else if (event.key === "Enter" && results[activeIndex]) {
+      } else if (event.key === "Enter" && keyboardState.results[keyboardState.activeIndex]) {
         event.preventDefault();
-        navigateTo(results[activeIndex].url);
+        const url = keyboardState.results[keyboardState.activeIndex].url;
+        onClose();
+        setQuery("");
+        router.push(url);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  });
+  }, [open, onClose, router]);
 
   const safeActiveIndex = activeIndex < results.length ? activeIndex : 0;
 

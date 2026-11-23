@@ -1,73 +1,127 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useScroll } from "motion/react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, List } from "lucide-react";
 import type { TocHeading } from "@/lib/mdx";
+
+interface TocContextValue {
+  activeId: string;
+  readPercent: number;
+  jumpTo: (id: string) => void;
+}
+
+const TocContext = createContext<TocContextValue | null>(null);
 
 function useTocState(headings: TocHeading[]) {
   const [activeId, setActiveId] = useState<string>(headings[0]?.id ?? "");
   const [readPercent, setReadPercent] = useState(0);
-  const { scrollYProgress } = useScroll();
-
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      setReadPercent(Math.round(latest * 100));
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
 
   useEffect(() => {
     if (headings.length === 0) return;
 
+    const trackedHeadings = headings
+      .map((heading) => ({
+        heading,
+        element: document.getElementById(heading.id),
+      }))
+      .filter(
+        (entry): entry is { heading: TocHeading; element: HTMLElement } =>
+          entry.element !== null,
+      );
+    let animationFrame = 0;
+    let updateQueued = false;
+
     const updateActiveHeading = () => {
+      updateQueued = false;
       const scrollTop = window.scrollY;
       const offset = 128;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const maxScroll = Math.max(0, scrollHeight - window.innerHeight);
+      const nextPercent =
+        maxScroll > 0
+          ? Math.round(Math.min(1, Math.max(0, scrollTop / maxScroll)) * 100)
+          : 0;
 
-      if (
-        window.innerHeight + scrollTop >=
-        document.documentElement.scrollHeight - 24
-      ) {
-        setActiveId(headings[headings.length - 1].id);
+      setReadPercent((prev) => (prev === nextPercent ? prev : nextPercent));
+
+      if (window.innerHeight + scrollTop >= scrollHeight - 24) {
+        const lastHeadingId = headings[headings.length - 1].id;
+        setActiveId((prev) => (prev === lastHeadingId ? prev : lastHeadingId));
         return;
       }
 
       let current = headings[0].id;
-      for (const heading of headings) {
-        const el = document.getElementById(heading.id);
-        if (!el) continue;
-        if (el.getBoundingClientRect().top <= offset) {
+      for (const { heading, element } of trackedHeadings) {
+        if (element.getBoundingClientRect().top <= offset) {
           current = heading.id;
         } else {
           break;
         }
       }
-      setActiveId(current);
+      setActiveId((prev) => (prev === current ? prev : current));
+    };
+
+    const scheduleUpdate = () => {
+      if (updateQueued) return;
+      updateQueued = true;
+      animationFrame = requestAnimationFrame(updateActiveHeading);
     };
 
     updateActiveHeading();
-    window.addEventListener("scroll", updateActiveHeading, { passive: true });
-    window.addEventListener("resize", updateActiveHeading, { passive: true });
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", updateActiveHeading);
-      window.removeEventListener("resize", updateActiveHeading);
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
     };
   }, [headings]);
 
-  const jumpTo = (id: string) => {
+  const jumpTo = useCallback((id: string) => {
     const target = document.getElementById(id);
     if (!target) return;
     setActiveId(id);
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     window.history.replaceState(null, "", `#${encodeURIComponent(id)}`);
-  };
+  }, []);
 
-  return { activeId, readPercent, jumpTo };
+  return useMemo(
+    () => ({ activeId, readPercent, jumpTo }),
+    [activeId, readPercent, jumpTo],
+  );
+}
+
+function useTocContext() {
+  const context = useContext(TocContext);
+  if (!context) {
+    throw new Error("TOC components must be rendered within TocProvider");
+  }
+  return context;
+}
+
+export function TocProvider({
+  headings,
+  children,
+}: {
+  headings: TocHeading[];
+  children: ReactNode;
+}) {
+  const value = useTocState(headings);
+  return <TocContext.Provider value={value}>{children}</TocContext.Provider>;
 }
 
 export function SidebarToc({ headings }: { headings: TocHeading[] }) {
-  const { activeId, readPercent, jumpTo } = useTocState(headings);
+  const { activeId, readPercent, jumpTo } = useTocContext();
 
   if (headings.length === 0) return null;
 
@@ -83,7 +137,10 @@ export function SidebarToc({ headings }: { headings: TocHeading[] }) {
         </span>
       </div>
 
-      <nav aria-label="文章目录" className="relative border-l border-zinc-200 dark:border-zinc-800">
+      <nav
+        aria-label="文章目录"
+        className="relative border-l border-zinc-200 dark:border-zinc-800"
+      >
         <ul className="space-y-0.5">
           {headings.map((heading) => {
             const isActive = heading.id === activeId;
@@ -127,13 +184,12 @@ export function SidebarToc({ headings }: { headings: TocHeading[] }) {
 }
 
 export function MobileToc({ headings }: { headings: TocHeading[] }) {
-  const { activeId, jumpTo } = useTocState(headings);
+  const { activeId, jumpTo } = useTocContext();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   if (headings.length === 0) return null;
 
-  const activeHeading =
-    headings.find((h) => h.id === activeId) ?? headings[0];
+  const activeHeading = headings.find((h) => h.id === activeId) ?? headings[0];
 
   return (
     <div
