@@ -135,7 +135,8 @@ export function SearchModal({ open, onClose, documents }: SearchModalProps) {
         if (cancelled) return;
 
         const mapped: SearchResultItem[] = topHits.map((hit, idx) => {
-          const cleanUrl = hit.url.replace(/\.html$/, "").replace(/\/index$/, "") || "/";
+          const cleanUrl =
+            hit.url.replace(/\.html$/, "").replace(/\/index$/, "").replace(/\/$/, "") || "/";
           const matchedDoc = documents.find((d) => d.url === cleanUrl);
           const inferredType: "post" | "work" =
             matchedDoc?.type ?? (cleanUrl.startsWith("/works") ? "work" : "post");

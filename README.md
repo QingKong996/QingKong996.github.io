@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 青空博客
 
-## Getting Started
+基于 Next.js 16、MDX、Tailwind CSS 与 Pagefind 的个人博客，静态发布至 GitHub Pages。
 
-First, run the development server:
+## 本地开发
+
+需要 Node.js 22（见 `.nvmrc`）。
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+常用命令：
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run test
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`npm run build` 会将静态站点导出到 `out/`，并为文章与作品生成 `out/pagefind/` 搜索索引。
 
-## Learn More
+## CI
 
-To learn more about Next.js, take a look at the following resources:
+`.github/workflows/ci.yml` 在 Pull Request、`master` 分支推送和手动触发时运行：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- ESLint
+- Vitest
+- Next.js 静态构建与 Pagefind 索引
+- 部署产物完整性检查
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## CD
 
-## Deploy on Vercel
+`.github/workflows/deploy.yml` 在 `master` 分支推送或手动触发时运行，完成校验后将 `out/` 发布到 GitHub Pages。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+仓库的 GitHub Pages 发布源需要设置为 **GitHub Actions**：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`Settings` → `Pages` → `Build and deployment` → `Source` → `GitHub Actions`
+
+站点自定义域名为 `qingkong996.com`，域名配置保存在 `public/CNAME`。

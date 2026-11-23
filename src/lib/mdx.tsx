@@ -53,8 +53,6 @@ function collectHeadingsFromHast(node: HastNode, out: TocHeading[]) {
 }
 
 export async function renderMdxContent(source: string, format: ContentFormat = "mdx") {
-  "use cache";
-
   const { default: Content } = await evaluate(source, {
     ...runtime,
     format,
@@ -91,8 +89,6 @@ export async function extractMdxHeadings(
   source: string,
   format: ContentFormat = "mdx"
 ): Promise<TocHeading[]> {
-  "use cache";
-
   const headings: TocHeading[] = [];
   const collectPlugin = () => (tree: HastNode) => {
     collectHeadingsFromHast(tree, headings);
