@@ -45,6 +45,7 @@ export const siteConfig = {
   xHandle: "@QingKong007",
   domain: "qingkong996.com",
   url: "https://qingkong996.com",
+  rssPath: "/rss.xml",
   repoUrl: "https://github.com/QingKong996/QingKong996.github.io",
   repoName: "QingKong996/QingKong996.github.io",
   licenseName: "CC BY-NC 4.0",
@@ -88,6 +89,13 @@ export const siteConfig = {
       href: "https://x.com/QingKong007",
       icon: "twitter",
       external: true,
+    },
+    {
+      title: "RSS",
+      subtitle: "rss.xml · 订阅文章更新",
+      href: "/rss.xml",
+      icon: "rss",
+      external: false,
     },
     {
       title: "Gmail",
