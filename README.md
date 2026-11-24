@@ -1,17 +1,30 @@
-# 青空博客
+# Blog
 
-基于 Next.js 16、MDX、Tailwind CSS 与 Pagefind 的个人博客，静态发布至 GitHub Pages。
+Static blog built with Next.js 16, MDX content, and Pagefind search.
 
-## 本地开发
+## Stack
 
-需要 Node.js 22（见 `.nvmrc`）。
+- Next.js App Router, React 19, TypeScript
+- Tailwind CSS 4, MDX, KaTeX
+- Pagefind, RSS 2.0
+
+## Structure
+
+- `content/posts/`: posts
+- `content/works/`: projects
+- `src/app/`: routes and pages
+- `src/lib/`: content loading, MDX rendering, RSS generation
+
+## Development
+
+Node.js 22 is required.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-常用命令：
+## Commands
 
 ```bash
 npm run lint
@@ -19,23 +32,11 @@ npm run test
 npm run build
 ```
 
-`npm run build` 会将静态站点导出到 `out/`，并为文章与作品生成 `out/pagefind/` 搜索索引。
+`npm run build` exports the static site to `out/` and generates the Pagefind index in `out/pagefind/`.
 
-## CI
+## Output
 
-`.github/workflows/ci.yml` 在 Pull Request、`master` 分支推送和手动触发时运行：
-
-- ESLint
-- Vitest
-- Next.js 静态构建与 Pagefind 索引
-- 部署产物完整性检查
-
-## CD
-
-`.github/workflows/deploy.yml` 在 `master` 分支推送或手动触发时运行，完成校验后将 `out/` 发布到 GitHub Pages。
-
-仓库的 GitHub Pages 发布源需要设置为 **GitHub Actions**：
-
-`Settings` → `Pages` → `Build and deployment` → `Source` → `GitHub Actions`
-
-站点自定义域名为 `qingkong996.com`，域名配置保存在 `public/CNAME`。
+- `out/`: static site
+- `out/pagefind/`: search index
+- `/rss.xml`: RSS 2.0 feed
+- `public/CNAME`: custom domain
