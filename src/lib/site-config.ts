@@ -42,6 +42,7 @@ export const siteConfig = {
   name: "QingKong",
   displayName: "青空 · QingKong",
   handle: "@QingKong996",
+  xHandle: "@QingKong007",
   domain: "qingkong996.com",
   url: "https://qingkong996.com",
   repoUrl: "https://github.com/QingKong996/QingKong996.github.io",

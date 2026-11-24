@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Code2, ExternalLink } from "lucide-react";
 import { getAllWorks, getWorkBySlug } from "@/lib/content";
 import { renderMdxContent } from "@/lib/mdx";
+import { createSocialImage } from "@/lib/og-image";
+import { siteConfig } from "@/lib/site-config";
 
 interface WorkDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -21,9 +23,36 @@ export async function generateMetadata({
   if (!work) {
     return { title: "作品未找到" };
   }
+  const url = `/works/${work.slug}/`;
+  const image = createSocialImage(`${url}og.png`, `${work.title} — ${siteConfig.displayName}`);
+
   return {
     title: work.title,
     description: work.summary,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: "article",
+      url,
+      siteName: siteConfig.displayName,
+      title: work.title,
+      description: work.summary,
+      locale: "zh_CN",
+      publishedTime: work.date ? `${work.date}T00:00:00.000Z` : undefined,
+      authors: [siteConfig.name],
+      tags: work.techStack,
+      section: work.category,
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: siteConfig.xHandle,
+      creator: siteConfig.xHandle,
+      title: work.title,
+      description: work.summary,
+      images: [image],
+    },
   };
 }
 

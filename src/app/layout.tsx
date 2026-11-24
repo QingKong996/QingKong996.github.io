@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollTopDock } from "@/components/scroll-top-dock";
 import { getSearchDocuments } from "@/lib/content";
+import { openGraphImage } from "@/lib/og-image";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -19,11 +20,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.displayName,
     template: `%s | ${siteConfig.displayName}`,
   },
   description: siteConfig.role,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: siteConfig.displayName,
+    title: siteConfig.displayName,
+    description: siteConfig.role,
+    locale: "zh_CN",
+    images: [openGraphImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: siteConfig.xHandle,
+    creator: siteConfig.xHandle,
+    title: siteConfig.displayName,
+    description: siteConfig.role,
+    images: [openGraphImage],
+  },
 };
 
 const themeInitScript = `
