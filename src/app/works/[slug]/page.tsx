@@ -5,7 +5,9 @@ import { ArrowLeft, Code2, ExternalLink } from "lucide-react";
 import { getAllWorks, getWorkBySlug } from "@/lib/content";
 import { renderMdxContent } from "@/lib/mdx";
 import { createSocialImage } from "@/lib/og-image";
+import { buildWorkSchema } from "@/lib/schema";
 import { siteConfig } from "@/lib/site-config";
+import { JsonLd } from "@/components/json-ld";
 
 interface WorkDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -64,10 +66,12 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
     notFound();
   }
 
+  const workSchema = buildWorkSchema(work);
   const { content: renderedContent } = await renderMdxContent(work.content, work.format);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <JsonLd data={workSchema} />
       {/* eslint-disable-next-line @next/next/no-css-tags */}
       <link rel="stylesheet" href="/katex/katex.min.css" precedence="default" />
       <Link

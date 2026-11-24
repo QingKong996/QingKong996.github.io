@@ -5,7 +5,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getAllPosts, getPostBySlug } from "@/lib/content";
 import { renderMdxContent } from "@/lib/mdx";
 import { createSocialImage } from "@/lib/og-image";
+import { buildPostSchema } from "@/lib/schema";
 import { siteConfig } from "@/lib/site-config";
+import { JsonLd } from "@/components/json-ld";
 import {
   MobileToc,
   SidebarToc,
@@ -67,6 +69,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
     notFound();
   }
 
+  const postSchema = buildPostSchema(post);
   const allPosts = getAllPosts();
   const currentIndex = allPosts.findIndex((item) => item.slug === post.slug);
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
@@ -81,6 +84,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 
   return (
     <>
+      <JsonLd data={postSchema} />
       {/* eslint-disable-next-line @next/next/no-css-tags */}
       <link rel="stylesheet" href="/katex/katex.min.css" precedence="default" />
       <TocProvider headings={headings}>

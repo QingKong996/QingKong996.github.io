@@ -4,8 +4,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollTopDock } from "@/components/scroll-top-dock";
+import { JsonLd } from "@/components/json-ld";
 import { getSearchDocuments } from "@/lib/content";
 import { openGraphImage } from "@/lib/og-image";
+import { buildSiteSchema } from "@/lib/schema";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -60,6 +62,8 @@ const themeInitScript = `
 })();
 `;
 
+const siteSchema = buildSiteSchema();
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const searchDocuments = getSearchDocuments();
 
@@ -76,6 +80,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           title={`${siteConfig.displayName} RSS`}
           href={siteConfig.rssPath}
         />
+        <JsonLd data={siteSchema} />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="flex min-h-full flex-col bg-background text-foreground selection:bg-emerald-500/20 selection:text-zinc-950 dark:selection:bg-emerald-400/25 dark:selection:text-zinc-50">
