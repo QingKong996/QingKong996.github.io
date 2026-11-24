@@ -1,10 +1,37 @@
 import type { Metadata } from "next";
 import { getAllWorkCategories, getAllWorks } from "@/lib/content";
+import { createSocialImage } from "@/lib/og-image";
+import { siteConfig } from "@/lib/site-config";
 import { WorksExplorer } from "@/components/works-explorer";
+
+const description =
+  "独立于博客文章的开源项目、交互工具与 Web 应用作品集，采用卡片网格展示。";
+const socialTitle = `作品 | ${siteConfig.displayName}`;
+const socialImage = createSocialImage("/works/og.png", socialTitle);
 
 export const metadata: Metadata = {
   title: "作品",
-  description: "独立于博客文章的开源项目、交互工具与 Web 应用作品集，采用卡片网格展示。",
+  description,
+  alternates: {
+    canonical: "/works/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/works/",
+    siteName: siteConfig.displayName,
+    title: socialTitle,
+    description,
+    locale: "zh_CN",
+    images: [socialImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: siteConfig.xHandle,
+    creator: siteConfig.xHandle,
+    title: socialTitle,
+    description,
+    images: [socialImage],
+  },
 };
 
 export default function WorksPage() {

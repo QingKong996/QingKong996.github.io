@@ -1,11 +1,36 @@
 import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/content";
+import { createSocialImage } from "@/lib/og-image";
 import { siteConfig } from "@/lib/site-config";
 import { PostsExplorer } from "@/components/posts-explorer";
 
+const description = "技术文章、AI 前沿观察与工程实践笔记。";
+const socialTitle = `文章 | ${siteConfig.displayName}`;
+const socialImage = createSocialImage("/posts/og.png", socialTitle);
+
 export const metadata: Metadata = {
   title: "文章",
-  description: "技术文章、AI 前沿观察与工程实践笔记。",
+  description,
+  alternates: {
+    canonical: "/posts/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/posts/",
+    siteName: siteConfig.displayName,
+    title: socialTitle,
+    description,
+    locale: "zh_CN",
+    images: [socialImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: siteConfig.xHandle,
+    creator: siteConfig.xHandle,
+    title: socialTitle,
+    description,
+    images: [socialImage],
+  },
 };
 
 export default function PostsPage() {

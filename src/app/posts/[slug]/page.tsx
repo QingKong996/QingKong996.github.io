@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getAllPosts, getPostBySlug } from "@/lib/content";
 import { renderMdxContent } from "@/lib/mdx";
+import { createSocialImage } from "@/lib/og-image";
 import { siteConfig } from "@/lib/site-config";
 import {
   MobileToc,
@@ -27,9 +28,34 @@ export async function generateMetadata({
   if (!post) {
     return { title: "文章未找到" };
   }
+  const url = `/posts/${post.slug}/`;
+  const image = createSocialImage(`${url}og.png`, `${post.title} — ${siteConfig.displayName}`);
+
   return {
     title: post.title,
     description: post.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: "article",
+      url,
+      siteName: siteConfig.displayName,
+      title: post.title,
+      description: post.description,
+      locale: "zh_CN",
+      publishedTime: `${post.date}T00:00:00.000Z`,
+      authors: [siteConfig.name],
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: siteConfig.xHandle,
+      creator: siteConfig.xHandle,
+      title: post.title,
+      description: post.description,
+      images: [image],
+    },
   };
 }
 
